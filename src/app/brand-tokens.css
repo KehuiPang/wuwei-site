@@ -1,0 +1,41 @@
+/* ============================================================
+   无为 VI · Design Tokens 骨架（单一色彩真源，接入 Tailwind v4 @theme）
+   取值权威 = 知识宫殿 0.无为品牌中心/无为VI落地规范v1.md §一（品牌先行）
+   气质：空灵 · 留白 · premium。一点朱(spark/cinnabar) 硬约束 ≤10% 面积，
+   仅用于 单个 CTA / "一念"火种 / 图标激活态。
+   小美正式导出 tokens.json 后，按本文件同名接口替换取值即可。
+   ============================================================ */
+@theme {
+  /* —— 品牌五色（权威名） —— */
+  --color-ink: #16191E;          /* 玄墨黑 · 主文字 / 深底 */
+  --color-paper: #F4F6F8;        /* 月白 · 主底 / 空灵留白 */
+  --color-water: #274A63;        /* 靛青 · 链接 / 导航 / 水意 */
+  --color-water-light: #6F9FAD;  /* 淡青 · hover / focus / info */
+  --color-bamboo: #5C8A73;       /* 竹青 · 成功 / 生机（约10%） */
+  --color-spark: #C05F3C;        /* 一点朱 · CTA / 火种（≤10%） */
+  --color-spark-hover: #B0532F;  /* 朱压深 · 主操作 hover */
+
+  /* —— 兼容别名（现有 page.tsx 在用，勿删） —— */
+  --color-indigo: #274A63;       /* = water */
+  --color-cinnabar: #C05F3C;     /* = spark */
+
+  /* —— 中性 / 面 / 描边 —— */
+  --color-surface: #FFFFFF;      /* 卡片 / 面 */
+  --color-bg-soft: #EEF1F4;      /* 次级底 */
+  --color-field: #F4F6F8;        /* 输入底 */
+  --color-mist: #E7EBEF;         /* 淡雾 · 分隔 / 卡片（现有在用） */
+  --color-inkmute: #5B636E;      /* 次要文字（现有在用） */
+  --color-dim: #6B747C;          /* 次要文字 */
+  --color-mute: #9AA3AB;         /* 占位 / 更次要 */
+  --color-border: #E6EAEE;       /* 分隔线 */
+  --color-border-strong: #D7DCE1;/* hover 描边 */
+
+  /* —— 功能色（低饱和，与品牌色区隔） —— */
+  --color-success: #5C8A73;      /* = 竹青 */
+  --color-warning: #C8933F;      /* 暖金，刻意区别于一点朱 */
+  --color-error: #B4483A;        /* 朱赭压深，勿与 spark(CTA) 同值 */
+  --color-info: #6F9FAD;         /* = 淡青 */
+
+  /* —— 字体 —— */
+  --font-sans: "Inter", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+}
