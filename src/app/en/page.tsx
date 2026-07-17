@@ -143,7 +143,7 @@ export default async function EnHome() {
           <a className="btn btn-p" href="#price">▼ Download Free · 30-sec start</a>
           <a className="btn btn-g" href="#how">See how it works</a>
         </div>
-        <div className="plat">{hasRelease ? "Free to start" : "Free to start · installers coming soon"}　|　macOS · Windows · Linux</div>
+        <div className="plat">{hasRelease ? "Free to start" : "Free to start · installers coming soon"} &nbsp;|&nbsp; macOS · Windows · Linux</div>
         <div className="trust">
           <div className="tt">Use any model you like · or configure nothing at all</div>
           <div className="logos">
@@ -160,12 +160,12 @@ export default async function EnHome() {
         <div className="row rv">
           <div className="side old">
             <div className="k">THE POWERFUL AI TOOLS</div>
-            <p>Claude Code and Codex are genuinely strong——<br />but you set up environments, configure keys, get past the firewall, type commands, and pay by the token. <b>For most people, just getting started is the wall.</b></p>
+            <p>Claude Code and Codex are genuinely powerful — <br />but they make you set up environments, wire up API keys, get past a firewall, memorize commands, and pay by the token. <b>For most people, just getting started is the wall.</b></p>
           </div>
           <div className="arrow">→</div>
           <div className="side new">
             <div className="k">WUWEI</div>
-            <p>Download, open, talk like a human.<br />No config, no VPN, no coding required — direct connection, free to start. <b>The same power — this time ordinary people can actually use it, and enjoy it.</b></p>
+            <p>Download, open, and talk like a human.<br />No setup, no VPN, no code — it just connects, and it's free to start. <b>Same power, except this time normal people can actually use it — and enjoy it.</b></p>
           </div>
         </div>
       </div></section>
@@ -178,9 +178,9 @@ export default async function EnHome() {
           <p className="lead">Top-tier AI shouldn't belong only to geeks. Wuwei strips away the barriers, the cost, the complexity — leaving one thing: you ask, it gets done.</p>
         </div>
         <div className="vals">
-          <div className="val rv"><div className="n">01</div><h3>Open and use, zero barrier</h3><p>No environments, no keys, no VPN, no code. Download, open, and say what you want in plain words — as simple as sending a message.</p></div>
-          <div className="val rv"><div className="n">02</div><h3>Free to start, silky to use</h3><p>Free to get going, costs transparent. A clean, intuitive interface — none of the command-line chill. Every step keeps up with your instinct.</p></div>
-          <div className="val rv"><div className="n">03</div><h3>The job gets done, and done well</h3><p>Not advice — done work: files edited, code running, reports formed. Bit by bit the work quietly gets done, and the result holds up.</p></div>
+          <div className="val rv"><div className="n">01</div><h3>Open it and go — zero barrier</h3><p>No environments, no keys, no VPN, no code. Download, open, and say what you want in plain words — as easy as sending a text.</p></div>
+          <div className="val rv"><div className="n">02</div><h3>Free to start, smooth to use</h3><p>Free to get going, costs always clear. A clean, intuitive interface with none of the command-line intimidation — every step keeps pace with your instinct.</p></div>
+          <div className="val rv"><div className="n">03</div><h3>The job gets done — and done well</h3><p>Not advice, but finished work: files edited, code running, reports written. Piece by piece the work quietly gets done, and the result holds up.</p></div>
         </div>
       </div></section>
 
@@ -307,7 +307,7 @@ export default async function EnHome() {
             <ul>
               <li>Built for programmers — command line first</li>
               <li>Need environments and API keys to run</li>
-              <li>Mostly need a VPN, clumsy in some regions</li>
+              <li>Usually need a VPN — awkward in some regions</li>
               <li>Billed by token, pricier the more you use</li>
               <li>Powerful, but daunting for normal people</li>
             </ul>
@@ -357,7 +357,7 @@ export default async function EnHome() {
           <a className="btn btn-p" href="#price">▼ Download Wuwei — Free</a>
           <a className="btn btn-g" href="#how">See how it works</a>
         </div>
-        <div className="plat">macOS · Windows · Linux　|　Bring your key, ready out of the box</div>
+        <div className="plat">macOS · Windows · Linux &nbsp;|&nbsp; Bring your own key, ready out of the box</div>
       </div></section>
 
       {/* FOOTER */}

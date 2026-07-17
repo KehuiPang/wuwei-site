@@ -15,6 +15,7 @@ export type VsPage = {
   locale: Locale;
   product: "wuwei" | "nian"; // JSON-LD 产品名
   noindex?: boolean;
+  hasEn?: boolean; // 该中文主页在 /en/vs/[slug] 有英文对标页（用于互标 hreflang）
   meta: { title: string; description: string };
   h1: string;
   subhead: string;
@@ -83,6 +84,7 @@ export const VS_PAGES: Record<string, VsPage> = {
     slug: "claude-code-free-alternative",
     locale: "zh",
     product: "wuwei",
+    hasEn: true,
     meta: {
       title: "想给 Claude Code 找个免费平替？无为，一念既出，万事自成",
       description:
@@ -137,6 +139,7 @@ export const VS_PAGES: Record<string, VsPage> = {
     locale: "zh",
     product: "wuwei",
     noindex: true, // ⚠️ 法律/品牌风险门禁：待 CEO 逐句终检后再放开索引
+    hasEn: true,
     meta: {
       title: "无为 vs Claude Code：你的代码该留在谁手里？",
       description:
@@ -200,6 +203,7 @@ export const VS_PAGES: Record<string, VsPage> = {
     slug: "wispr-flow-free-alternative",
     locale: "zh",
     product: "nian",
+    hasEn: true,
     meta: {
       title: "Wispr Flow 要 $15/月？无为念：免费，且跨平台",
       description:
@@ -250,6 +254,7 @@ export const VS_PAGES: Record<string, VsPage> = {
     slug: "claude-code-account-banned",
     locale: "zh",
     product: "wuwei",
+    hasEn: true,
     meta: {
       title: "Claude Code 账号被封了？先别慌，三步恢复 + 一个不会被封的备选",
       description:
@@ -302,5 +307,249 @@ export const VS_PAGES: Record<string, VsPage> = {
 
 // 进 sitemap / 被索引的 slug（排除 noindex 门禁页）
 export const INDEXABLE_VS_SLUGS = Object.values(VS_PAGES)
+  .filter((p) => !p.noindex)
+  .map((p) => p.slug);
+
+// ═══════════════════════════════════════════════════════════════════
+// 英文对标页矩阵（/en/vs/[slug]）—— 面向 overseas devs 的地道英文，
+// 非中文直译。每篇与 /vs/[slug] 中文页互标 hreflang。
+// claude-code-alternative 本身已是英文页（在 /vs），故不在此重复，避免重复内容。
+// ═══════════════════════════════════════════════════════════════════
+export const VS_PAGES_EN: Record<string, VsPage> = {
+  // ————————————————————————————————————————————————
+  "claude-code-free-alternative": {
+    slug: "claude-code-free-alternative",
+    locale: "en",
+    product: "wuwei",
+    meta: {
+      title: "The best free Claude Code alternative — Wuwei: local, open, yours",
+      description:
+        "Want a genuinely free Claude Code alternative? Wuwei is a free, open-source AI coding agent that runs on your own machine. No subscription, no metered API bill, no vendor lock-in. Bring any model.",
+    },
+    h1: "The best free Claude Code alternative is the one you actually own",
+    subhead:
+      "Not a stripped-down free tier that nags you to upgrade. A real AI coding agent that's free because that's how a good tool should start.",
+    cta: { text: "Download Wuwei — Free", href: "/en#download" },
+    secondary: [
+      { label: "Got banned already? First aid →", href: "/en/vs/claude-code-account-banned" },
+      { label: "中文版 →", href: "/vs/claude-code-free-alternative" },
+    ],
+    blocks: [
+      {
+        kind: "prose",
+        text:
+          "Most \"free\" alternatives aren't. The app is free, but you still pay per token, wrestle with API keys, or hit a paywall the moment the work gets real. Wuwei is free the whole way through: download it, open it, and start shipping.",
+      },
+      {
+        kind: "points",
+        items: [
+          { t: "Actually free", d: "No subscription, no credit card, no \"free app, you pay the API\" catch. Wuwei runs out of the box. Free is the starting point, not a trial timer." },
+          { t: "Runs locally", d: "Your code and your project stay on your own machine. Nothing is shipped off to a place you can't see." },
+          { t: "Open source (MIT)", d: "Read exactly what it does, line by line. No hidden telemetry, no region tagging, no surprises." },
+          { t: "Bring any model", d: "Claude, any OpenAI-compatible endpoint, or a local model via vLLM / Ollama. You can walk away anytime — which is exactly why it's safe to stay." },
+        ],
+      },
+      {
+        kind: "table",
+        h: "How they compare",
+        headers: ["What you care about", "Wuwei", "Claude Code", "Cursor"],
+        rows: [
+          ["Price", "Free, out of the box", "Subscription", "Subscription (~$20/mo)"],
+          ["Region bans", "Runs locally, no region tagging", "Region checks reported in the press", "—"],
+          ["Where your code lives", "On your own machine", "In the cloud", "In the cloud"],
+          ["Open source", "Yes (MIT)", "No", "No"],
+          ["Locked to one platform", "No — bring any model", "Tied to its own platform", "Tied to its own platform"],
+        ],
+        note: "For the reported facts and sources behind the region story, see the comparison page.",
+      },
+      {
+        kind: "prose",
+        text:
+          "Switching is quick. Coming from Claude Code, you don't start over — import your existing project context and config, and you're back to work in a few minutes.",
+      },
+    ],
+  },
+
+  // ————————————————————————————————————————————————
+  "wispr-flow-free-alternative": {
+    slug: "wispr-flow-free-alternative",
+    locale: "en",
+    product: "nian",
+    meta: {
+      title: "Wispr Flow costs $15/mo. Wuwei Voice is free — and works on Windows",
+      description:
+        "Looking for a free Wispr Flow alternative? Wuwei Voice is free push-to-talk dictation: hold to speak, get clean auto-punctuated text at your cursor. Works on Windows, keeps your data local.",
+    },
+    h1: "Wispr Flow wants $15 a month. Wuwei Voice is free — and it runs on Windows",
+    subhead:
+      "Voice input should feel like breathing: you speak, the words land. That shouldn't cost you a subscription.",
+    cta: { text: "Download Wuwei Voice — Free", href: "/nian" },
+    secondary: [
+      { label: "Want AI that does the work too? Meet Wuwei →", href: "/en/vs/claude-code-free-alternative" },
+      { label: "中文版 →", href: "/vs/wispr-flow-free-alternative" },
+    ],
+    blocks: [
+      {
+        kind: "prose",
+        text:
+          "Good dictation gets out of your way: hold the key, talk, let go — the text is already at your cursor, punctuation and slips cleaned up for you. That's Wuwei Voice. And it's free — not free-for-14-days, just free.",
+      },
+      {
+        kind: "points",
+        items: [
+          { t: "Free", d: "Against Wispr Flow's $15/month, Wuwei Voice works out of the box with no monthly fee. A tool this basic shouldn't be behind a paywall." },
+          { t: "Works on Windows", d: "This is where the competition falls short. Wuwei Voice lives in your Windows tray, ready the moment you press to talk." },
+          { t: "Handles mixed speech", d: "Accurate on natural speech, including code terms, product names, and English mixed in. A personal dictionary learns the words you actually use." },
+          { t: "AI polish, not raw transcript", d: "It fixes slips, adds punctuation, and tidies the sentence, so what lands is text you can actually use." },
+          { t: "Local & private", d: "What you say is processed and gone. It isn't shipped somewhere else." },
+        ],
+      },
+      {
+        kind: "table",
+        h: "How they compare",
+        headers: ["What you care about", "Wuwei Voice", "Wispr Flow", "superwhisper"],
+        rows: [
+          ["Price", "Free", "~$15/mo", "Subscription / paid"],
+          ["Platform", "Windows (more coming)", "Mac / Windows", "Mac only"],
+          ["Local processing", "Processed locally", "Cloud-based", "Mostly local"],
+          ["AI polish", "Auto-fix + punctuation + cleanup", "Yes", "Yes"],
+          ["Personal dictionary", "Yes — learns your words", "Limited", "Limited"],
+        ],
+      },
+      {
+        kind: "prose",
+        text:
+          "Once Wuwei Voice clicks, you'll notice it and Wuwei are cut from the same cloth: one turns your speech into text, the other turns your intent into done work. Both free, both local, both stay out of your way.",
+      },
+    ],
+  },
+
+  // ————————————————————————————————————————————————
+  "claude-code-account-banned": {
+    slug: "claude-code-account-banned",
+    locale: "en",
+    product: "wuwei",
+    meta: {
+      title: "Claude Code account banned? 3 steps to recover + a backup that won't ban you",
+      description:
+        "Claude Code account banned or cut off? Here are three things to do right now, plus Wuwei — a free, local AI coding agent with no region tagging that gets you back to work in minutes.",
+    },
+    h1: "Claude Code account banned? Don't panic — 3 steps to get working again, and a backup that can't lock you out",
+    subhead:
+      "When you're locked out, the urgent thing isn't figuring out why. It's getting the work moving again. Start there.",
+    cta: { text: "Download Wuwei — back to work in minutes", href: "/en#download" },
+    secondary: [
+      { label: "How does Wuwei actually differ from Claude Code? →", href: "/en/vs/wuwei-vs-claude-code" },
+      { label: "中文版 →", href: "/vs/claude-code-account-banned" },
+    ],
+    blocks: [
+      {
+        kind: "prose",
+        text:
+          "You wake up, the account is gone, and a project is stuck halfway. No \"most powerful alternative ever\" pitch helps you here. You need one thing: get the work turning again. Here are three steps — just follow them.",
+      },
+      {
+        kind: "points",
+        h: "Three steps to get working again",
+        items: [
+          { t: "1 · Confirm the status before mass-appealing", d: "Figure out whether it's a ban, a regional block, or a temporary flag. Screenshot the evidence and file one official appeal — but don't stake everything on it. The recovery timeline isn't yours to control." },
+          { t: "2 · Export your project context now", d: "Pull your current config, context, and go-to prompts into local files. That's your asset, independent of any tool. With it, you can be productive again in minutes on whatever comes next." },
+          { t: "3 · Move to a tool that can't be region-banned", d: "You don't need another cloud account that might lock you out again. You need an agent that runs on your own machine — one that doesn't check where you are or tag you." },
+        ],
+      },
+      {
+        kind: "points",
+        h: "The backup that can't ban you: Wuwei",
+        items: [
+          { t: "Can't be region-banned", d: "Wuwei runs locally with no region tagging. Your setup is yours, whatever your location or network." },
+          { t: "Your data stays put", d: "Project and code live on your machine and aren't sent back. You can see exactly what it does." },
+          { t: "Free", d: "Out of the box, no subscription, no credit card — and no \"free app, you pay the API\" catch." },
+          { t: "Zero-cost migration", d: "Import your existing project context and config, and pick up where you left off in minutes. No rebuild." },
+        ],
+      },
+      {
+        kind: "table",
+        h: "At a glance",
+        headers: ["What you care about", "Wuwei", "Claude Code"],
+        rows: [
+          ["Region-ban risk", "Runs locally, no region tagging", "Region checks & bans reported in the press"],
+          ["Where your code lives", "On your own machine", "In the cloud"],
+          ["Price", "Free, no subscription", "Subscription"],
+          ["Time to switch", "Import config — a few minutes", "—"],
+        ],
+        note: "For the reported facts and sources, see the Wuwei vs Claude Code comparison page.",
+      },
+    ],
+  },
+
+  // ————————————————————————————————————————————————
+  "wuwei-vs-claude-code": {
+    slug: "wuwei-vs-claude-code",
+    locale: "en",
+    product: "wuwei",
+    noindex: true, // ⚠️ 同中文门禁页：涉法律/品牌风险，待 CEO 逐句终检后再放开索引
+    meta: {
+      title: "Wuwei vs Claude Code: whose hands should your code stay in?",
+      description:
+        "A local, open-source, free AI coding agent. Claude Code has been reported to embed hidden region-detection markers. Wuwei chooses to keep your code in your own hands.",
+    },
+    h1: "Wuwei vs Claude Code: whose hands should your code stay in?",
+    subhead:
+      "This isn't a contest over which is stronger. It's a plainer question — every line you write, do you want it to stay with you, or be handed off?",
+    cta: { text: "Keep your code in your own hands · Download Wuwei free", href: "/en#download" },
+    secondary: [
+      { label: "Locked out already? 3 steps back →", href: "/en/vs/claude-code-account-banned" },
+      { label: "Just want a free alternative? →", href: "/en/vs/claude-code-free-alternative" },
+      { label: "中文版 →", href: "/vs/wuwei-vs-claude-code" },
+    ],
+    blocks: [
+      {
+        kind: "prose",
+        text:
+          "Whether a tool suits you is a matter of taste. But one thing isn't up for debate: your code is yours. We're not here to claim anyone \"crushes\" anyone. We'll lay out two things — facts already reported in public, and the choices Wuwei made on the same questions. You decide.",
+      },
+      {
+        kind: "facts",
+        h: "The facts (compiled from public reporting; wording kept neutral, judgment left to you)",
+        items: [
+          {
+            text: "Tom's Hardware reported that, starting from v2.1.91 (2026-04-02), Claude Code was alleged to embed detection and watermarking logic targeting China time zones / proxy environments.",
+            source: "https://www.tomshardware.com/tech-industry/artificial-intelligence/alibaba-bans-anthropics-claude-code-after-an-alleged-hidden-china-detection-backdoor-is-uncovered-employees-told-to-switch-to-qoder-as-the-rift-between-the-firms-widens",
+          },
+          {
+            text: "Guancha reported on 2026-07-03 that Anthropic acknowledged embedding hidden markers in the product.",
+            source: "https://www.guancha.cn/economy/2026_07_03_822485.shtml",
+          },
+          {
+            text: "BigGo reported that on 2026-07-10 Alibaba flagged it as high-risk and banned it internally company-wide.",
+            source: "https://finance.biggo.com/news/a401b1c7-07f5-44e1-9291-cbbd71da342c",
+          },
+        ],
+        note: "We add no emotional spin to any of this. The facts are here; the conclusion is yours to draw.",
+      },
+      {
+        kind: "table",
+        h: "Side by side",
+        headers: ["Dimension", "Wuwei", "Claude Code"],
+        rows: [
+          ["Where code / data lives", "Local-first, code stays on your own machine", "Relies on cloud services"],
+          ["Open & auditable", "Open source (MIT), reviewable line by line", "Closed; reported to have carried undisclosed detection markers"],
+          ["Ban risk", "Runs locally, no region tagging — your account is yours", "Region checks and bans reported in public"],
+          ["Platform lock-in", "Model-agnostic: Claude / OpenAI-compatible / local models", "Tied to its own platform and account system"],
+          ["Price", "Free, out of the box, no subscription or card", "Subscription"],
+        ],
+        note: "The \"Wuwei\" column isn't marketing copy — it's the choice the product made from its first line of code.",
+      },
+      {
+        kind: "prose",
+        text:
+          "Why does Wuwei choose local-first, open source, and no region tagging of any kind? Not to win a row in this table. It's because we believe an older idea: the highest good is like water — it benefits all things and contends with none. A good tool should be open: you can see what it does, and it doesn't make decisions for you where you can't watch. You write the code; it gets the work done — but the pen stays in your hand. One intention, everything done — and \"everything\" never includes quietly taking your things away. That's Wuwei: hand execution to the AI, and keep the code, the choices, and the control in your own hands.",
+      },
+    ],
+  },
+};
+
+// 英文页进 sitemap 的 slug（排除 noindex 门禁页）
+export const INDEXABLE_VS_SLUGS_EN = Object.values(VS_PAGES_EN)
   .filter((p) => !p.noindex)
   .map((p) => p.slug);
