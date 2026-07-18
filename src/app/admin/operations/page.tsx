@@ -1,6 +1,9 @@
 import { createServerSupabase } from '@/lib/server'
 import { redirect } from 'next/navigation'
 import OperationsDashboard from './components/OperationsDashboard'
+import CoinConfigForm from './components/CoinConfigForm'
+import PricingConfigForm from './components/PricingConfigForm'
+import ModelCostsConfigForm from './components/ModelCostsConfigForm'
 
 export default async function AdminOperationsPage() {
   const supabase = await createServerSupabase()
@@ -52,6 +55,12 @@ export default async function AdminOperationsPage() {
           configs={configs || []} 
           stats={{ userCount: userCount || 0, txCount: txCount || 0 }}
         />
+        
+        <div className="mt-8 space-y-8">
+          <CoinConfigForm />
+          <PricingConfigForm />
+          <ModelCostsConfigForm />
+        </div>
       </main>
     </div>
   )
