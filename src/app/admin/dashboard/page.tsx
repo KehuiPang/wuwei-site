@@ -10,13 +10,13 @@ export default async function AdminDashboardPage() {
     redirect('/admin/login')
   }
   
-  const { data: user } = await supabase
+  const { data: user, error: userError } = await supabase
     .from('users')
     .select('role')
     .eq('id', session.user.id)
     .single()
   
-  if (user?.role !== 'admin') {
+  if (userError || !user || (user as any).role !== 'admin') {
     redirect('/')
   }
   
@@ -37,17 +37,18 @@ export default async function AdminDashboardPage() {
   
   // 计算今日统计
   const today = new Date().toISOString().split('T')[0]
-  const todayTransactions = recentTransactions?.filter(tx => 
-    tx.created_at.startsWith(today)
+  const txs = (recentTransactions || []) as any[]
+  const todayTransactions = txs.filter((tx: any) => 
+    tx.created_at?.startsWith(today)
   ) || []
   
   const todayEarned = todayTransactions
-    .filter(tx => tx.type === 'earn')
-    .reduce((sum, tx) => sum + tx.amount, 0)
+    .filter((tx: any) => tx.type === 'earn')
+    .reduce((sum: number, tx: any) => sum + (tx.amount || 0), 0)
   
   const todaySpent = todayTransactions
-    .filter(tx => tx.type === 'spend')
-    .reduce((sum, tx) => sum + tx.amount, 0)
+    .filter((tx: any) => tx.type === 'spend')
+    .reduce((sum: number, tx: any) => sum + (tx.amount || 0), 0)
   
   return (
     <div className="min-h-screen bg-gray-50">

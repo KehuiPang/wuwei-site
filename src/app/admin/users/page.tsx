@@ -10,13 +10,13 @@ export default async function AdminUsersPage() {
     redirect('/admin/login')
   }
   
-  const { data: user } = await supabase
+  const { data: userData, error: userError } = await supabase
     .from('users')
     .select('role')
     .eq('id', session.user.id)
     .single()
   
-  if (user?.role !== 'admin') {
+  if (userError || !userData || (userData as any).role !== 'admin') {
     redirect('/')
   }
   

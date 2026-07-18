@@ -43,16 +43,16 @@ export default function CoinConfigForm() {
           .from('operation_configs')
           .insert({
             key: 'coin_config',
-            value: config,
+            value: config as any,
             description: '无为币积分配置'
-          })
+          } as any)
         
         if (insertError) throw insertError
       } else {
         // 更新
         const { error: updateError } = await supabase
           .from('operation_configs')
-          .update({ value: config, updated_at: new Date().toISOString() })
+          .update({ value: config as any, updated_at: new Date().toISOString() } as any)
           .eq('key', 'coin_config')
         
         if (updateError) throw updateError

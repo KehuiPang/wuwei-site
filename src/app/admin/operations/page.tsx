@@ -15,21 +15,23 @@ export default async function AdminOperationsPage() {
   }
   
   // 检查是否为管理员
-  const { data: user } = await supabase
+  const { data: userData, error: userError } = await supabase
     .from('users')
     .select('role')
     .eq('id', session.user.id)
     .single()
   
-  if (user?.role !== 'admin') {
+  if (userError || !userData || (userData as any).role !== 'admin') {
     redirect('/')
   }
   
   // 获取运营配置
-  const { data: configs } = await supabase
+  const { data: configsData } = await supabase
     .from('operation_configs')
     .select('*')
     .order('key')
+  
+  const configs = (configsData || []) as any[]
   
   // 获取用户统计
   const { count: userCount } = await supabase

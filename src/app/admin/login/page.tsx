@@ -26,13 +26,13 @@ export default function AdminLoginPage() {
       if (error) throw error
 
       // 检查是否为管理员
-      const { data: user } = await supabase
+      const { data: userData, error: userError } = await supabase
         .from('users')
         .select('role')
         .eq('id', data.user.id)
         .single()
 
-      if (user?.role !== 'admin') {
+      if (userError || !userData || (userData as any).role !== 'admin') {
         await supabase.auth.signOut()
         throw new Error('无权访问：需要管理员权限')
       }
