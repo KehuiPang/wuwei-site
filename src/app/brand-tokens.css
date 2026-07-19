@@ -39,3 +39,24 @@
   /* —— 字体 —— */
   --font-sans: "Inter", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
 }
+
+/* ============================================================
+   深色模式覆盖（强制深色，不跟随系统）
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+/* 强制深色模式 */
+:root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
