@@ -46,6 +46,11 @@
 :root {
   --background: #0F1216;         /* 玄墨黑底 */
   --foreground: #E8EAED;         /* 月白字 */
+  
+  /* 深色模式下，文字颜色应该是浅色 */
+  --color-ink: #E8EAED;          /* 主文字 = 月白 */
+  --color-inkmute: #9AA3AB;      /* 次要文字 = 浅灰 */
+  --color-mute: #6B747C;         /* 占位文字 = 中灰 */
 }
 
 @theme inline {
