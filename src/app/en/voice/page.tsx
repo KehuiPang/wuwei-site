@@ -44,6 +44,41 @@ export const metadata: Metadata = {
   ],
 };
 
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Wuwei Voice",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "Windows, macOS, Linux",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+      "description": "Voice input for the AI era. Hold to speak, and it transcribes in real time, smooths the slips and punctuation, and drops the text right where you're typing. Free, cross-platform, local.",
+      "url": "https://wuweiai.io/en/voice",
+      "downloadUrl": "https://wuweiai.io/api/download?product=nian&platform=windows",
+      "softwareVersion": "1.0",
+      "inLanguage": "en",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Wuwei",
+        "url": "https://wuweiai.io"
+      }
+    },
+    {
+      "@type": "Organization",
+      "name": "Wuwei",
+      "url": "https://wuweiai.io",
+      "logo": "https://wuweiai.io/favicon.ico",
+      "description": "Making AI tools that are zero-barrier, free, and smooth for everyone."
+    }
+  ]
+};
+
 function WuMark({ className, stroke = 12, dot = 10 }: { className?: string; stroke?: number; dot?: number }) {
   return (
     <svg viewBox="0 0 240 240" className={className} aria-label="Wuwei Voice">
@@ -307,6 +342,11 @@ export default function VoicePageEn() {
         </div>
         <div className="copy">One intention, words into text. · © 2026 Wuwei</div>
       </div></footer>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
+      />
     </div>
   );
 }

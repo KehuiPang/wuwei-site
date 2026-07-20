@@ -44,6 +44,41 @@ export const metadata: Metadata = {
   ],
 };
 
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "无为截",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "Windows, macOS, Linux",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "CNY",
+        "availability": "https://schema.org/InStock"
+      },
+      "description": "AI 截图工具。框住屏幕上任何东西，AI 直接读懂：翻译、识别、追问、变成下一步。一按即截，免费、轻量。",
+      "url": "https://wuweiai.io/shot",
+      "downloadUrl": "https://wuweiai.io/api/download?product=shot&platform=windows",
+      "softwareVersion": "1.0",
+      "inLanguage": "zh-CN",
+      "publisher": {
+        "@type": "Organization",
+        "name": "无为 Wuwei",
+        "url": "https://wuweiai.io"
+      }
+    },
+    {
+      "@type": "Organization",
+      "name": "无为 Wuwei",
+      "url": "https://wuweiai.io",
+      "logo": "https://wuweiai.io/favicon.ico",
+      "description": "把 Claude Code / Codex 那种极客专属的强，做成普通人零门槛、免费、丝滑就能用的 AI 工具。"
+    }
+  ]
+};
+
 function WuMark({ className, stroke = 12, dot = 10 }: { className?: string; stroke?: number; dot?: number }) {
   return (
     <svg viewBox="0 0 240 240" className={className} aria-label="无为截">
@@ -307,6 +342,11 @@ export default function ShotPage() {
         </div>
         <div className="copy">一念既出，所见即得 · One intention. What you see is what you get. · © 2026 无为 Wuwei</div>
       </div></footer>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
+      />
     </div>
   );
 }

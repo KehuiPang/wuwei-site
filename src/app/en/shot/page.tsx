@@ -44,6 +44,41 @@ export const metadata: Metadata = {
   ],
 };
 
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Wuwei Shot",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "Windows, macOS, Linux",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+      "description": "AI screenshot tool. Frame anything on your screen and have AI read it: translate, extract, ask, act. One hotkey to capture. Free and light.",
+      "url": "https://wuweiai.io/en/shot",
+      "downloadUrl": "https://wuweiai.io/api/download?product=shot&platform=windows",
+      "softwareVersion": "1.0",
+      "inLanguage": "en",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Wuwei",
+        "url": "https://wuweiai.io"
+      }
+    },
+    {
+      "@type": "Organization",
+      "name": "Wuwei",
+      "url": "https://wuweiai.io",
+      "logo": "https://wuweiai.io/favicon.ico",
+      "description": "Making AI tools that are zero-barrier, free, and smooth for everyone."
+    }
+  ]
+};
+
 function WuMark({ className, stroke = 12, dot = 10 }: { className?: string; stroke?: number; dot?: number }) {
   return (
     <svg viewBox="0 0 240 240" className={className} aria-label="Wuwei Shot">
@@ -307,6 +342,11 @@ export default function ShotPageEn() {
         </div>
         <div className="copy">One intention, what you see is what you get. · © 2026 Wuwei</div>
       </div></footer>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
+      />
     </div>
   );
 }

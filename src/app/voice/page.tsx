@@ -44,6 +44,41 @@ export const metadata: Metadata = {
   ],
 };
 
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "无为念",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "Windows, macOS, Linux",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "CNY",
+        "availability": "https://schema.org/InStock"
+      },
+      "description": "AI 时代的语音输入工具。按住说话，实时转文字，自动润色，落进你正在打字的地方。免费、跨平台、中文友好、数据本地。",
+      "url": "https://wuweiai.io/voice",
+      "downloadUrl": "https://wuweiai.io/api/download?product=nian&platform=windows",
+      "softwareVersion": "1.0",
+      "inLanguage": "zh-CN",
+      "publisher": {
+        "@type": "Organization",
+        "name": "无为 Wuwei",
+        "url": "https://wuweiai.io"
+      }
+    },
+    {
+      "@type": "Organization",
+      "name": "无为 Wuwei",
+      "url": "https://wuweiai.io",
+      "logo": "https://wuweiai.io/favicon.ico",
+      "description": "把 Claude Code / Codex 那种极客专属的强，做成普通人零门槛、免费、丝滑就能用的 AI 工具。"
+    }
+  ]
+};
+
 function WuMark({ className, stroke = 12, dot = 10 }: { className?: string; stroke?: number; dot?: number }) {
   return (
     <svg viewBox="0 0 240 240" className={className} aria-label="无为念">
@@ -307,6 +342,11 @@ export default function VoicePage() {
         </div>
         <div className="copy">一念既出，落字自成 · One intention. Words into text. · © 2026 无为 Wuwei</div>
       </div></footer>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
+      />
     </div>
   );
 }
