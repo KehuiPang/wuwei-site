@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   description:
     "把 Claude Code、Codex 那种极客专属的强，做成普通人零门槛、免费、丝滑就能用的 AI 客户端。极致简单 · 零门槛 · 免费 · 用着丝滑 · 干得漂亮。",
   keywords: ["无为", "Wuwei", "AI客户端", "AI提效", "Claude Code", "Codex", "AI代理", "智能体"],
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     type: "website",
     url: SITE,
