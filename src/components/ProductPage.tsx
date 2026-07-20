@@ -1,7 +1,8 @@
 // 三产品详情页共享骨架（服务端渲染）。内容来自 lib/products.ts（非机翻，源自品牌中心）。
 // 结构：品牌壳(SiteHeader) + hero(可选 opening 引子 + 圆相 + h1 + sub + 主CTA + 次级链接)
 //       + 5 卖点卡 + 收尾 + SiteFooter。VI token 全走 spark/water/bamboo，一点朱只给主 CTA。
-import { SiteHeader } from "./SiteHeader";
+// 2026-07-20 统一为深色主题（wu-land），与官网首页一致
+import "../app/landing.css";
 import { SiteFooter } from "./SiteFooter";
 import { CircleMark, FeatureCard, TextLink } from "./ui";
 import { CTAButton } from "./CTAButton";
@@ -41,8 +42,7 @@ export function ProductPage({
   };
 
   return (
-    <>
-      <SiteHeader locale={locale} />
+    <div className="wu-land">
       <Track path={trackPath} />
 
       {/* JSON-LD 结构化数据 */}
@@ -51,14 +51,29 @@ export function ProductPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <main className="flex-1">
+      {/* ——— 导航 ——— */}
+      <nav className="nav"><div className="wrap">
+        <a className="brand" href={locale === "en" ? "/en" : "/"}>
+          <CircleMark size={32} />
+          <span><span className="zh">{locale === "en" ? "Wuwei" : "无为"}</span> <span className="en">WUWEI</span></span>
+        </a>
+        <div className="nav-right">
+          <div className="nav-links">
+            <a href={locale === "en" ? "/en/voice" : "/voice"}>{locale === "en" ? "Voice" : "无为念"}</a>
+            <a href={locale === "en" ? "/en/shot" : "/shot"}>{locale === "en" ? "Shot" : "无为截"}</a>
+          </div>
+          <a className="nav-cta" href={downloadHref}>{cta}</a>
+        </div>
+      </div></nav>
+
+      <main>
         {/* ————— Hero ————— */}
-        <section className="max-w-3xl mx-auto px-6 pt-24 pb-20 text-center rise">
+        <section className="hero"><div className="wrap">
           {/* 引子（无为念/无为截 有故事式开场；无为本尊无） */}
           {hero.opening && hero.opening.length > 0 && (
-            <div className="mb-10 space-y-2 text-inkmute leading-relaxed">
+            <div className="mb-10 space-y-2 text-mist leading-relaxed">
               {hero.opening.map((line, i) => (
-                <p key={i} className={i === hero.opening!.length - 1 ? "text-ink font-medium" : ""}>
+                <p key={i} className={i === hero.opening!.length - 1 ? "text-l-paper font-medium" : ""}>
                   {line}
                 </p>
               ))}
@@ -66,10 +81,10 @@ export function ProductPage({
           )}
 
           <div className="flex justify-center mb-9"><CircleMark size={52} /></div>
-          <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-ink leading-[1.12]">
+          <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight leading-[1.12]">
             {hero.h1}
           </h1>
-          <p className="mt-7 text-lg text-inkmute leading-relaxed max-w-2xl mx-auto">
+          <p className="mt-7 text-lg text-mist leading-relaxed max-w-2xl mx-auto">
             {hero.sub}
           </p>
 
@@ -80,10 +95,10 @@ export function ProductPage({
               <TextLink href={secondary.href}>{secondary.label}</TextLink>
             )}
           </div>
-        </section>
+        </div></section>
 
         {/* ————— 5 卖点 ————— */}
-        <section className="max-w-4xl mx-auto px-6 py-16 border-t border-mist">
+        <section className="max-w-4xl mx-auto px-6 py-16 border-t border-line">
           <div className="grid sm:grid-cols-2 gap-5">
             {features.map((f, i) => (
               <FeatureCard key={i} title={f.t} desc={f.d} />
@@ -92,8 +107,8 @@ export function ProductPage({
         </section>
 
         {/* ————— 收尾 ————— */}
-        <section className="max-w-2xl mx-auto px-6 py-20 border-t border-mist text-center">
-          <p className="text-lg text-inkmute leading-relaxed">{closing}</p>
+        <section className="max-w-2xl mx-auto px-6 py-20 border-t border-line text-center">
+          <p className="text-lg text-mist leading-relaxed">{closing}</p>
           <div className="mt-9 flex justify-center">
             <CTAButton href={downloadHref} label={`${trackPath}#closing-cta`} product={trackPath.includes("voice") || trackPath.includes("nian") ? "nian" : trackPath.includes("shot") ? "shot" : "wuwei"}>{cta}</CTAButton>
           </div>
@@ -101,6 +116,6 @@ export function ProductPage({
       </main>
 
       <SiteFooter locale={locale} />
-    </>
+    </div>
   );
 }
