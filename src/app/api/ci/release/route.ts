@@ -9,7 +9,7 @@ export const runtime = "nodejs";
 //   —— 未配置密钥则 fail-closed 返回 503（端点未武装），避免裸奔。
 //   —— 密钥与 Supabase 密钥分离（最小权限）。
 // 行为：写入 releases 行，is_published=false（发版与上架解耦，人工在后台勾选后前台才可见）。
-// ⚠️ 真实安装包依赖 minicc 客户端仓 CI 出三平台包（另一条线）；本轮只把官网侧端点就绪。
+// ⚠️ 真实安装包依赖无为客户端仓 CI 出三平台包（另一条线）；本轮只把官网侧端点就绪。
 
 const PLATFORMS = new Set(["windows", "macos", "linux"]);
 const CHANNELS = new Set(["stable", "beta"]);

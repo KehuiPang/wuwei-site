@@ -3,7 +3,7 @@ import { supabaseAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-// 客户端上报端点（需求③，方案 §6）：minicc 客户端登录/启动/安装时上报。
+// 客户端上报端点（需求③，方案 §6）：无为客户端登录/启动/安装时上报。
 // 隐私红线：只收匿名 anon_id + 版本 + 平台，绝不收个人数据（无 email/name/IP 明文）。
 // 写 client_events；同时补一条 analytics_events(client_login) 便于看板统一口径。
 
