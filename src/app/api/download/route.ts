@@ -18,9 +18,9 @@ const PRODUCTS = new Set(["wuwei", "nian", "shot"]);
 // 所以必须用公开仓库 wuwei-io/wuwei-download 的链接
 const GITHUB_RELEASES: Record<string, Record<string, string>> = {
   wuwei: {
-    windows: "https://github.com/wuwei-io/wuwei-pro/releases/download/v1.3.3/wuwei-pro-1.3.3-setup.exe",
-    macos: "https://github.com/wuwei-io/wuwei-pro/releases/download/v1.3.3/Pro-1.3.3.dmg",
-    linux: "https://github.com/wuwei-io/wuwei-pro/releases/download/v1.3.3/wuwei-pro_1.3.3_amd64.deb",
+    windows: "https://github.com/wuwei-io/wuwei/releases/download/v1.3.3/wuwei-1.3.3-setup.exe",
+    macos: "https://github.com/wuwei-io/wuwei/releases/download/v1.3.3/wuwei-1.3.3-x64.dmg",
+    linux: "https://github.com/wuwei-io/wuwei/releases/download/v1.3.3/wuwei_1.3.3_amd64.deb",
   },
   nian: {
     windows: "https://github.com/wuwei-io/wuwei-download/releases/download/voice-v0.1.0/WuweiVoice_0.1.0_x64_en-US.msi",
