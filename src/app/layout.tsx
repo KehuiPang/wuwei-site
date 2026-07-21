@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { getSiteTheme } from "@/lib/site-config";
 
 const SITE = "https://wuweiai.io";
 
@@ -46,9 +45,9 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const theme = await getSiteTheme(); // 'dark'(默认) | 'light'，读 site_config.theme
+  // 董事长拍板：只保留深色版，亮色砍掉
   return (
-    <html lang="zh-CN" data-theme={theme} className="h-full antialiased">
+    <html lang="zh-CN" data-theme="dark" className="h-full antialiased">
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
