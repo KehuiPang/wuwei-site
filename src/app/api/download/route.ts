@@ -13,7 +13,9 @@ function hashIp(ip: string | null): string | null {
 const PLATFORMS = new Set(["windows", "macos", "linux"]);
 const PRODUCTS = new Set(["wuwei", "nian", "shot"]);
 
-// GitHub Release 下载地址映射
+// GitHub Release 下载地址映射（公开仓库，匿名可下）
+// 注意：无为念源码仓 wuwei-io/wuwei-voice 是私有的，匿名下载 404；
+// 所以必须用公开仓库 wuwei-io/wuwei-download 的链接
 const GITHUB_RELEASES: Record<string, Record<string, string>> = {
   wuwei: {
     windows: "https://github.com/wuwei-io/wuwei-pro/releases/download/v1.3.3/wuwei-pro-1.3.3-setup.exe",
@@ -21,9 +23,9 @@ const GITHUB_RELEASES: Record<string, Record<string, string>> = {
     linux: "https://github.com/wuwei-io/wuwei-pro/releases/download/v1.3.3/wuwei-pro_1.3.3_amd64.deb",
   },
   nian: {
-    windows: "https://github.com/wuwei-io/wuwei-pro/releases/download/v1.3.3/wuwei-pro-1.3.3-setup.exe",
-    macos: "https://github.com/wuwei-io/wuwei-pro/releases/download/v1.3.3/Pro-1.3.3.dmg",
-    linux: "https://github.com/wuwei-io/wuwei-pro/releases/download/v1.3.3/wuwei-pro_1.3.3_amd64.deb",
+    windows: "https://github.com/wuwei-io/wuwei-download/releases/download/voice-v0.1.0/WuweiVoice_0.1.0_x64_en-US.msi",
+    macos: "https://github.com/wuwei-io/wuwei-download/releases/download/voice-v0.1.0/WuweiVoice_0.1.0_aarch64.dmg",
+    linux: "https://github.com/wuwei-io/wuwei-download/releases/download/voice-v0.1.0/WuweiVoice_0.1.0_amd64.AppImage",
   },
   shot: {
     windows: "https://github.com/wuwei-io/wuwei-shot/releases/download/v2.0.0/wuwei-shot-Windows-x64.exe",
@@ -35,7 +37,7 @@ const GITHUB_RELEASES: Record<string, Record<string, string>> = {
 // 版本号映射
 const VERSIONS: Record<string, string> = {
   wuwei: "1.3.3",
-  nian: "1.3.3",
+  nian: "0.1.0",
   shot: "2.0.0",
 };
 
@@ -54,7 +56,7 @@ export async function GET(req: NextRequest) {
   let fileUrl: string | null = null;
   let version = VERSIONS[product] || "latest";
 
-  // 1) 先查 GitHub Release 映射
+  // 1) 先查 GitHub Release 映射（最高优先级，确保公开仓库链接稳定）
   const ghUrl = GITHUB_RELEASES[product]?.[platform];
   if (ghUrl) {
     fileUrl = ghUrl;
