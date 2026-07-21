@@ -318,6 +318,54 @@ export default function ShotPageEn() {
         <div className="sig rv">— Wuwei Shot · Screenshots that think</div>
       </div></section>
 
+      {/* ——— Pricing ——— */}
+      <section className="sec" id="price" style={{background:"linear-gradient(180deg,rgba(26,31,38,.35),rgba(20,23,28,0))"}}><div className="wrap">
+        <div className="sec-head rv">
+          <div className="eyebrow">Pricing</div>
+          <div className="h2">Start free, <span className="zhu">upgrade when ready</span></div>
+          <p className="lead">Download and use immediately. Upgrade when you need more — no pressure.</p>
+        </div>
+        <div className="prices">
+          <div className="price rv">
+            <div className="pn">Free</div>
+            <div className="pd">Frame anything, AI reads it</div>
+            <div className="amt">$0</div>
+            <ul>
+              <li>Frame anything, AI reads it</li>
+              <li>Translate, extract, ask</li>
+              <li>One hotkey to capture</li>
+            </ul>
+            <a className="btn btn-g" href="/api/download?product=shot&platform=windows" style={{justifyContent:"center"}}>Download Free</a>
+            <div className="note">No sign-up required</div>
+          </div>
+          <div className="price feat rv">
+            <div className="badge">Most Popular</div>
+            <div className="pn">Wuwei Shot Pro</div>
+            <div className="pd">Faster recognition, longer history</div>
+            <div className="amt">$4.99 <span>/ month</span></div>
+            <ul>
+              <li>All Free features</li>
+              <li>Faster recognition</li>
+              <li>Longer history</li>
+              <li>Priority support</li>
+            </ul>
+            <a className="btn btn-p" href="#price" style={{justifyContent:"center"}}>Upgrade Pro</a>
+            <div className="note">Cancel anytime</div>
+          </div>
+          <div className="price rv">
+            <div className="pn">Wuwei Shot Pro Annual</div>
+            <div className="pd">Pay 10, get 12 months</div>
+            <div className="amt">$36 <span>/ year</span></div>
+            <ul>
+              <li>All Pro features</li>
+              <li>Best value</li>
+            </ul>
+            <a className="btn btn-g" href="#price" style={{justifyContent:"center"}}>Choose Annual</a>
+            <div className="note">≈$3/month</div>
+          </div>
+        </div>
+      </div></section>
+
       {/* ——— Final CTA ——— */}
       <section className="sec final"><div className="wrap">
         <h2 className="rv">Screenshots<br/><span className="spark">that think</span>.</h2>

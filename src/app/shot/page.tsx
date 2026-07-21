@@ -318,6 +318,65 @@ export default function ShotPage() {
         <div className="sig rv">— 无为截 · 截图，会思考了</div>
       </div></section>
 
+      {/* ——— 定价 ——— */}
+      <section className="sec" id="price" style={{background:"linear-gradient(180deg,rgba(26,31,38,.35),rgba(20,23,28,0))"}}><div className="wrap">
+        <div className="sec-head rv">
+          <div className="eyebrow">Pricing</div>
+          <div className="h2">免费开始，<span className="zhu">用顺了再说</span></div>
+          <p className="lead">下载即用，先免费体验。用出感觉、需要更多，再升级——一步都不勉强。</p>
+        </div>
+        <div className="prices">
+          <div className="price rv">
+            <div className="pn">免费版</div>
+            <div className="pd">框住屏幕，AI 读懂</div>
+            <div className="amt">¥0</div>
+            <ul>
+              <li>框住屏幕，AI 读懂</li>
+              <li>翻译、识别、追问</li>
+              <li>一按即截，带标注</li>
+            </ul>
+            <a className="btn btn-g" href="/api/download?product=shot&platform=windows" style={{justifyContent:"center"}}>免费下载</a>
+            <div className="note">无需注册，下载即用</div>
+          </div>
+          <div className="price feat rv">
+            <div className="badge">最受欢迎</div>
+            <div className="pn">无为截 Pro</div>
+            <div className="pd">更快识别，更长历史</div>
+            <div className="amt">¥12 <span>/ 月</span></div>
+            <ul>
+              <li>免费版全部功能</li>
+              <li>更快识别</li>
+              <li>更长历史</li>
+              <li>优先支持</li>
+            </ul>
+            <a className="btn btn-p" href="#price" style={{justifyContent:"center"}}>升级 Pro</a>
+            <div className="note">随时可升级 / 取消</div>
+          </div>
+          <div className="price rv">
+            <div className="pn">无为截 Pro 年付</div>
+            <div className="pd">付 10 月送 2 月，更划算</div>
+            <div className="amt">¥88 <span>/ 年</span></div>
+            <ul>
+              <li>Pro 全部功能</li>
+              <li>年付更划算</li>
+            </ul>
+            <a className="btn btn-g" href="#price" style={{justifyContent:"center"}}>选择年付</a>
+            <div className="note">≈¥7.3/月</div>
+          </div>
+          <div className="price rv">
+            <div className="pn">无为截 永久买断</div>
+            <div className="pd">一次付费，永久使用</div>
+            <div className="amt">¥138</div>
+            <ul>
+              <li>Pro 全部功能</li>
+              <li>永久使用，无订阅</li>
+            </ul>
+            <a className="btn btn-g" href="#price" style={{justifyContent:"center"}}>买断</a>
+            <div className="note">一次付费，永久使用</div>
+          </div>
+        </div>
+      </div></section>
+
       {/* ——— 最终 CTA ——— */}
       <section className="sec final"><div className="wrap">
         <h2 className="rv">截图，<span className="spark">会思考了</span>。</h2>
