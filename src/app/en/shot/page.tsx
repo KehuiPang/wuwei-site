@@ -159,7 +159,7 @@ export default function ShotPageEn() {
           <span className="claim">Light and free</span>
         </div>
         <div className="btns" id="download">
-          <a className="btn btn-p" href="/api/download?product=shot&platform=windows">▼ Download Wuwei Shot — Free</a>
+          <span className="btn btn-p" style={{opacity:0.6,cursor:"not-allowed"}}>▼ Coming Soon</span>
           <a className="btn btn-g" href="#how">See how it works</a>
         </div>
         <div className="plat">Free to start · Direct connect　|　Windows · macOS · Linux</div>
@@ -335,8 +335,8 @@ export default function ShotPageEn() {
               <li>Translate, extract, ask</li>
               <li>One hotkey to capture</li>
             </ul>
-            <a className="btn btn-g" href="/api/download?product=shot&platform=windows" style={{justifyContent:"center"}}>Download Free</a>
-            <div className="note">No sign-up required</div>
+            <span className="btn btn-g" style={{justifyContent:"center",opacity:0.6,cursor:"not-allowed"}}>Coming Soon</span>
+            <div className="note">Coming soon, stay tuned</div>
           </div>
           <div className="price feat rv">
             <div className="badge">Most Popular</div>
@@ -371,7 +371,7 @@ export default function ShotPageEn() {
         <h2 className="rv">Screenshots<br/><span className="spark">that think</span>.</h2>
         <p className="rv">Hand copying pixels over to Wuwei, and keep the intent for yourself. Start now, free.</p>
         <div className="btns rv">
-          <a className="btn btn-p" href="/api/download?product=shot&platform=windows">▼ Download Wuwei Shot — Free</a>
+          <span className="btn btn-p" style={{opacity:0.6,cursor:"not-allowed"}}>▼ Coming Soon</span>
           <a className="btn btn-g" href="#how">See how it works</a>
         </div>
         <div className="plat">Windows · macOS · Linux　|　Free to start, ready out of the box</div>

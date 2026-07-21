@@ -159,7 +159,7 @@ export default function ShotPage() {
           <span className="claim">轻量免费</span>
         </div>
         <div className="btns" id="download">
-          <a className="btn btn-p" href="/api/download?product=shot&platform=windows">▼ 免费下载无为截</a>
+          <span className="btn btn-p" style={{opacity:0.6,cursor:"not-allowed"}}>▼ 即将上线</span>
           <a className="btn btn-g" href="#how">看它如何工作</a>
         </div>
         <div className="plat">免费开始 · 国内直连　|　Windows · macOS · Linux</div>
@@ -335,8 +335,8 @@ export default function ShotPage() {
               <li>翻译、识别、追问</li>
               <li>一按即截，带标注</li>
             </ul>
-            <a className="btn btn-g" href="/api/download?product=shot&platform=windows" style={{justifyContent:"center"}}>免费下载</a>
-            <div className="note">无需注册，下载即用</div>
+            <span className="btn btn-g" style={{justifyContent:"center",opacity:0.6,cursor:"not-allowed"}}>即将上线</span>
+            <div className="note">即将上线，敬请期待</div>
           </div>
           <div className="price feat rv">
             <div className="badge">最受欢迎</div>
@@ -382,7 +382,7 @@ export default function ShotPage() {
         <h2 className="rv">截图，<span className="spark">会思考了</span>。</h2>
         <p className="rv">把复制像素交出去，把复制意图还给自己。现在就开始，免费。</p>
         <div className="btns rv">
-          <a className="btn btn-p" href="/api/download?product=shot&platform=windows">▼ 免费下载无为截</a>
+          <span className="btn btn-p" style={{opacity:0.6,cursor:"not-allowed"}}>▼ 即将上线</span>
           <a className="btn btn-g" href="#how">看它如何工作</a>
         </div>
         <div className="plat">Windows · macOS · Linux　|　免费开始，开箱即用</div>
