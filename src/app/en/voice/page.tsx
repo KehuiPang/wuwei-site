@@ -60,7 +60,7 @@ const JSON_LD = {
       },
       "description": "Voice input for the AI era. Hold to speak, and it transcribes in real time, smooths the slips and punctuation, and drops the text right where you're typing. Free, cross-platform, local.",
       "url": "https://wuweiai.io/en/voice",
-      "downloadUrl": "https://wuweiai.io/api/download?product=nian&platform=windows",
+      "downloadUrl": "https://wuweiai.io/api/download?product=voice&platform=windows",
       "softwareVersion": "1.0",
       "inLanguage": "en",
       "publisher": {
@@ -159,7 +159,7 @@ export default function VoicePageEn() {
           <span className="claim">Local processing</span>
         </div>
         <div className="btns" id="download">
-          <a className="btn btn-p" href="/api/download?product=nian&platform=windows">▼ Download Wuwei Voice — Free</a>
+          <a className="btn btn-p" href="/api/download?product=voice&platform=windows">▼ Download Wuwei Voice — Free</a>
           <a className="btn btn-g" href="#how">See how it works</a>
         </div>
         <div className="plat">Free to start · Direct connect　|　Windows · macOS · Linux</div>
@@ -323,7 +323,7 @@ export default function VoicePageEn() {
         <h2 className="rv">Your mind moves fast.<br/><span className="spark">Now your words can too.</span></h2>
         <p className="rv">Hand typing over to Wuwei, and keep speaking for yourself. Start now, free.</p>
         <div className="btns rv">
-          <a className="btn btn-p" href="/api/download?product=nian&platform=windows">▼ Download Wuwei Voice — Free</a>
+          <a className="btn btn-p" href="/api/download?product=voice&platform=windows">▼ Download Wuwei Voice — Free</a>
           <a className="btn btn-g" href="#how">See how it works</a>
         </div>
         <div className="plat">Windows · macOS · Linux　|　Free to start, ready out of the box</div>

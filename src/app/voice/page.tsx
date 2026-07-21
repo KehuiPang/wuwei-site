@@ -60,7 +60,7 @@ const JSON_LD = {
       },
       "description": "AI 时代的语音输入工具。按住说话，实时转文字，自动润色，落进你正在打字的地方。免费、跨平台、中文友好、数据本地。",
       "url": "https://wuweiai.io/voice",
-      "downloadUrl": "https://wuweiai.io/api/download?product=nian&platform=windows",
+      "downloadUrl": "https://wuweiai.io/api/download?product=voice&platform=windows",
       "softwareVersion": "1.0",
       "inLanguage": "zh-CN",
       "publisher": {
@@ -159,7 +159,7 @@ export default function VoicePage() {
           <span className="claim">数据本地</span>
         </div>
         <div className="btns" id="download">
-          <a className="btn btn-p" href="/api/download?product=nian&platform=windows">▼ 免费下载无为念</a>
+          <a className="btn btn-p" href="/api/download?product=voice&platform=windows">▼ 免费下载无为念</a>
           <a className="btn btn-g" href="#how">看它如何工作</a>
         </div>
         <div className="plat">免费开始 · 国内直连　|　Windows · macOS · Linux</div>
@@ -323,7 +323,7 @@ export default function VoicePage() {
         <h2 className="rv">让表达，<span className="spark">追上思考</span>。</h2>
         <p className="rv">把打字交出去，把说话还给自己。现在就开始，免费。</p>
         <div className="btns rv">
-          <a className="btn btn-p" href="/api/download?product=nian&platform=windows">▼ 免费下载无为念</a>
+          <a className="btn btn-p" href="/api/download?product=voice&platform=windows">▼ 免费下载无为念</a>
           <a className="btn btn-g" href="#how">看它如何工作</a>
         </div>
         <div className="plat">Windows · macOS · Linux　|　免费开始，开箱即用</div>

@@ -11,7 +11,7 @@ function hashIp(ip: string | null): string | null {
 }
 
 const PLATFORMS = new Set(["windows", "macos", "linux"]);
-const PRODUCTS = new Set(["wuwei", "nian", "shot"]);
+const PRODUCTS = new Set(["wuwei", "voice", "nian", "shot"]);
 
 // GitHub Release 下载地址映射（公开仓库，匿名可下）
 // 注意：无为念源码仓 wuwei-io/wuwei-voice 是私有的，匿名下载 404；
@@ -22,6 +22,12 @@ const GITHUB_RELEASES: Record<string, Record<string, string>> = {
     macos: "https://github.com/wuwei-io/wuwei/releases/download/v1.3.3/wuwei-1.3.3-x64.dmg",
     linux: "https://github.com/wuwei-io/wuwei/releases/download/v1.3.3/wuwei_1.3.3_amd64.deb",
   },
+  voice: {
+    windows: "https://github.com/wuwei-io/wuwei-download/releases/download/voice-v0.1.0/WuweiVoice_0.1.0_x64_en-US.msi",
+    macos: "https://github.com/wuwei-io/wuwei-download/releases/download/voice-v0.1.0/WuweiVoice_0.1.0_aarch64.dmg",
+    linux: "https://github.com/wuwei-io/wuwei-download/releases/download/voice-v0.1.0/WuweiVoice_0.1.0_amd64.AppImage",
+  },
+  // nian 保留向后兼容（旧链接 301 到 voice 后，API 层 product=nian 仍能工作）
   nian: {
     windows: "https://github.com/wuwei-io/wuwei-download/releases/download/voice-v0.1.0/WuweiVoice_0.1.0_x64_en-US.msi",
     macos: "https://github.com/wuwei-io/wuwei-download/releases/download/voice-v0.1.0/WuweiVoice_0.1.0_aarch64.dmg",
@@ -37,6 +43,7 @@ const GITHUB_RELEASES: Record<string, Record<string, string>> = {
 // 版本号映射
 const VERSIONS: Record<string, string> = {
   wuwei: "1.3.3",
+  voice: "0.1.0",
   nian: "0.1.0",
   shot: "2.0.0",
 };

@@ -9,6 +9,20 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/nian',
+        destination: '/voice',
+        permanent: true, // 301
+      },
+      {
+        source: '/en/nian',
+        destination: '/en/voice',
+        permanent: true, // 301
+      },
+    ];
+  },
 };
 
 export default nextConfig;
