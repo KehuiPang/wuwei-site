@@ -3,6 +3,7 @@ import "../landing.css";
 import { Track } from "@/components/Track";
 import { Reveal } from "@/components/Reveal";
 import { HeroDemo } from "@/components/HeroDemo";
+import { AuthButton } from "@/components/AuthButton";
 
 export const revalidate = 60;
 
@@ -137,7 +138,7 @@ export default function VoicePage() {
             <a href="#how">怎么用</a>
             <a href="#story">无为·念</a>
           </div>
-          <a className="nav-cta" href="#download">免费下载</a>
+          <AuthButton locale="zh" />
         </div>
       </div></nav>
       <span id="top"></span>

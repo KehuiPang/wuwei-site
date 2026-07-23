@@ -3,6 +3,7 @@ import "../../landing.css";
 import { Track } from "@/components/Track";
 import { Reveal } from "@/components/Reveal";
 import { HeroDemo } from "@/components/HeroDemo";
+import { AuthButton } from "@/components/AuthButton";
 
 export const revalidate = 60;
 
@@ -137,7 +138,7 @@ export default function VoicePageEn() {
             <a href="#how">How it works</a>
             <a href="#story">Wuwei · Voice</a>
           </div>
-          <a className="nav-cta" href="#download">Download Free</a>
+          <AuthButton locale="en" />
         </div>
       </div></nav>
       <span id="top"></span>
