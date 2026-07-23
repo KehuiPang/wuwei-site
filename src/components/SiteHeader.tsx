@@ -38,12 +38,6 @@ export function SiteHeader({ locale }: { locale: Locale }) {
           </div>
           <LanguageSwitch current={locale} />
           <AuthButton locale={locale === "zh" ? "zh" : "en"} />
-          <a
-            href="/api/download?platform=windows"
-            className="hidden sm:inline-flex px-4 py-1.5 rounded-lg bg-spark text-paper font-medium hover:bg-spark-hover transition"
-          >
-            {t.nav.download}
-          </a>
         </div>
       </nav>
     </header>

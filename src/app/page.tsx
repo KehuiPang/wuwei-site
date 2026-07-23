@@ -110,7 +110,6 @@ export default async function Home() {
           </div>
           <LandLangSwitch current="zh" />
           <AuthButton locale="zh" />
-          <a className="nav-cta" href="#price">免费下载</a>
         </div>
       </div></nav>
       <span id="top"></span>

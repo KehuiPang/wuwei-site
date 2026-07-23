@@ -124,7 +124,6 @@ export default async function EnHome() {
           </div>
           <LandLangSwitch current="en" />
           <AuthButton locale="en" />
-          <a className="nav-cta" href="#price">Download Free</a>
         </div>
       </div></nav>
 
