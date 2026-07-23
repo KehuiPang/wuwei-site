@@ -6,8 +6,7 @@ import { Track } from "@/components/Track";
 import { Reveal } from "@/components/Reveal";
 import { HeroDemo } from "@/components/HeroDemo";
 import { HeroChatBox } from "@/components/HeroChatBox";
-import { LandLangSwitch } from "@/components/LandLangSwitch";
-import { AuthButton } from "@/components/AuthButton";
+import { LandNav } from "@/components/LandNav";
 
 export const revalidate = 60;
 
@@ -96,29 +95,12 @@ export default async function Home() {
     <div className="wu-land">
       <Track path="/" />
       <Reveal />
-      <nav className="nav"><div className="wrap">
-        <a className="brand" href="#top">
-          <WuMark stroke={12} dot={10} />
-          <span><span className="zh">无为</span> <span className="en">WUWEI</span></span>
-        </a>
-        <div className="nav-right">
-          <div className="nav-links">
-            <a href="#feature">功能</a>
-            <a href="#how">怎么用</a>
-            <a href="#story">无为·道</a>
-            <a href="#price">定价</a>
-          </div>
-          <LandLangSwitch current="zh" />
-          <AuthButton locale="zh" />
-        </div>
-      </div></nav>
+      <LandNav locale="zh" />
       <span id="top"></span>
       <header className="hero"><div className="wrap">
         <WuMark className="logo" stroke={9} dot={7.4} />
         <h1>一念既出，<span className="spark">万事自成</span>。</h1>
         <div className="en">ONE INTENTION. EVERYTHING DONE.</div>
-        <p className="vp"><b>极致简单 · 无门槛 · 免费。</b><br/><span className="dim">下载打开，说句人话——用着用着，活就悄悄干完了，而且干得漂亮。</span></p>
-        <HeroChatBox lang="zh" />
         <div className="claims">
           <span className="claim">极致简单</span>
           <span className="claim">零门槛</span>
@@ -126,6 +108,8 @@ export default async function Home() {
           <span className="claim">用着丝滑</span>
           <span className="claim">干得漂亮</span>
         </div>
+        <p className="vp"><span className="dim">下载打开，说句人话——用着用着，活就悄悄干完了，而且干得漂亮。</span></p>
+        <HeroChatBox lang="zh" />
         <div className="plat" id="download">免费开始 · 国内直连　|　macOS · Windows · Linux</div>
         <HeroDemo title="无为 · 一句话，活自己干完" lines={[
           {role:"you", text:"你 ▸ 把这份 sales.xlsx 清洗好，导出 CSV 再画张趋势图"},

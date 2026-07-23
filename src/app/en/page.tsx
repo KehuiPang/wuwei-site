@@ -5,8 +5,7 @@ import { Track } from "@/components/Track";
 import { Reveal } from "@/components/Reveal";
 import { HeroDemo } from "@/components/HeroDemo";
 import { HeroChatBox } from "@/components/HeroChatBox";
-import { LandLangSwitch } from "@/components/LandLangSwitch";
-import { AuthButton } from "@/components/AuthButton";
+import { LandNav } from "@/components/LandNav";
 
 export const revalidate = 60; // ISR：改价/发版后 60s 内自动生效
 
@@ -110,22 +109,7 @@ export default async function EnHome() {
       <Reveal />
 
       {/* NAV */}
-      <nav className="nav"><div className="wrap">
-        <a className="brand" href="#top">
-          <WuMark stroke={12} dot={10} />
-          <span><span className="zh">Wuwei</span> <span className="en">无为</span></span>
-        </a>
-        <div className="nav-right">
-          <div className="nav-links">
-            <a href="#feature">Features</a>
-            <a href="#how">How</a>
-            <a href="#story">Story</a>
-            <a href="#price">Pricing</a>
-          </div>
-          <LandLangSwitch current="en" />
-          <AuthButton locale="en" />
-        </div>
-      </div></nav>
+      <LandNav locale="en" />
 
       <span id="top"></span>
 
@@ -134,8 +118,6 @@ export default async function EnHome() {
         <WuMark className="logo" stroke={9} dot={7.4} />
         <h1>One intention. <span className="spark">Everything done.</span></h1>
         <div className="en">无为 · WUWEI</div>
-        <p className="vp"><b>Effortless · Zero setup · Free.</b><br /><span className="dim">Download, open, say it in plain words — and the work quietly gets done, beautifully.</span></p>
-        <HeroChatBox lang="en" />
         <div className="claims">
           <span className="claim">Effortless</span>
           <span className="claim">Zero setup</span>
@@ -143,6 +125,8 @@ export default async function EnHome() {
           <span className="claim">Silky to use</span>
           <span className="claim">Done well</span>
         </div>
+        <p className="vp"><span className="dim">Download, open, say it in plain words — and the work quietly gets done, beautifully.</span></p>
+        <HeroChatBox lang="en" />
         <div className="plat" id="download">{hasRelease ? "Free to start" : "Free to start · installers coming soon"} &nbsp;|&nbsp; macOS · Windows · Linux</div>
         <HeroDemo
           title="Wuwei · one sentence, work done"

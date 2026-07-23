@@ -3,7 +3,7 @@ import "../landing.css";
 import { Track } from "@/components/Track";
 import { Reveal } from "@/components/Reveal";
 import { HeroDemo } from "@/components/HeroDemo";
-import { AuthButton } from "@/components/AuthButton";
+import { LandNav } from "@/components/LandNav";
 
 export const revalidate = 60;
 
@@ -127,20 +127,14 @@ export default function VoicePage() {
       <Reveal />
 
       {/* ——— 导航 ——— */}
-      <nav className="nav"><div className="wrap">
-        <a className="brand" href="#top">
-          <WuMark stroke={12} dot={10} />
-          <span><span className="zh">无为念</span> <span className="en">WUWEI VOICE</span></span>
-        </a>
-        <div className="nav-right">
-          <div className="nav-links">
-            <a href="#feature">功能</a>
-            <a href="#how">怎么用</a>
-            <a href="#story">无为·念</a>
-          </div>
-          <AuthButton locale="zh" />
-        </div>
-      </div></nav>
+      <LandNav
+        locale="zh"
+        productPage={{
+          name: "无为念",
+          nameEn: "WUWEI VOICE",
+          downloadHref: "/api/download?product=voice&platform=windows",
+        }}
+      />
       <span id="top"></span>
 
       {/* ——— Hero ——— */}

@@ -96,7 +96,13 @@ export function HeroChatBox({ lang, downloadHref = "#price" }: HeroChatBoxProps)
 
   const goDownload = () => {
     setOpen(false);
-    document.querySelector(downloadHref)?.scrollIntoView({ behavior: "smooth" });
+    // 直接触发下载，不滚动到定价区
+    const platform = navigator.platform.toLowerCase().includes("mac")
+      ? "macos"
+      : navigator.platform.toLowerCase().includes("linux")
+      ? "linux"
+      : "windows";
+    window.location.href = `/api/download?product=wuwei&platform=${platform}`;
   };
 
   return (
