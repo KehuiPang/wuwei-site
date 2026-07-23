@@ -1,10 +1,10 @@
 // 站点页脚（服务端渲染）。中英各一套。
 import Link from "next/link";
-import { PRODUCTS, UI_TEXT, type Locale } from "@/lib/site";
+import { PRODUCTS, uiText, type Locale } from "@/lib/site";
 import { CircleMark } from "./ui";
 
 export function SiteFooter({ locale }: { locale: Locale }) {
-  const t = UI_TEXT[locale];
+  const t = uiText(locale);
   const homeHref = locale === "en" ? "/en" : "/";
   // 英文站产品页路由映射
   const productHref = (key: string) => {
@@ -28,7 +28,7 @@ export function SiteFooter({ locale }: { locale: Locale }) {
         <nav className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-inkmute">
           {PRODUCTS.map((p) => (
             <Link key={p.key} href={productHref(p.key)} className="hover:text-water transition">
-              {p.name[locale]}
+              {p.name[locale as "zh" | "en"] ?? p.name.en}
             </Link>
           ))}
         </nav>

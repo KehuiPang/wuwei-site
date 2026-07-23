@@ -11,16 +11,16 @@ import { Track } from "@/components/Track";
 // 来源文案在 lib/vs.ts；本组件只负责呈现 + JSON-LD，不含事实/文案。
 
 // 事实区/表格用的「来源：」前缀随语言切换
-function sourceLabel(locale: "zh" | "en") {
+function sourceLabel(locale: string) {
   return locale === "en" ? "Source: " : "来源：";
 }
 
-function productName(product: "wuwei" | "nian", locale: "zh" | "en") {
+function productName(product: "wuwei" | "nian", locale: string) {
   if (product === "nian") return locale === "en" ? "Wuwei Voice" : "无为念";
   return locale === "en" ? "Wuwei" : "无为";
 }
 
-function Block({ b, locale }: { b: VsBlock; locale: "zh" | "en" }) {
+function Block({ b, locale }: { b: VsBlock; locale: string }) {
   if (b.kind === "prose") {
     return <p className="text-lg text-inkmute leading-relaxed">{b.text}</p>;
   }

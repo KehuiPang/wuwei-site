@@ -82,12 +82,20 @@
   .nav-cta { background: var(--cinnabar); color: #fff !important; padding: 9px 18px; border-radius: 10px; font-size: 14px; box-shadow: 0 6px 20px -6px rgba(192, 95, 60, .55); }
   .nav-cta:hover { background: var(--cinnabar2); }
   .nav-right { display: flex; align-items: center; gap: clamp(18px, 2.6vw, 34px); }
-  /* 语言切换：「中文 | EN」分段药丸，当前语言月白底玄墨字高亮；与文字链/CTA 视觉区隔 */
-  .lang-switch { display: inline-flex; align-items: center; gap: 1px; border: 1px solid var(--line2); border-radius: 10px; padding: 3px; background: rgba(255, 255, 255, .05); }
-  .lang-switch button { border: 0; background: transparent; color: var(--mist2); border-radius: 7px; padding: 5px 12px; font-size: 13px; letter-spacing: 1px; cursor: pointer; transition: color .16s, background .16s; }
-  .lang-switch button:hover { color: var(--l-paper); }
-  .lang-switch button.on { background: var(--l-paper); color: var(--ink); font-weight: 600; }
-  .lang-switch .lang-sep { color: var(--line-hover); font-size: 12px; padding: 0 1px; user-select: none; }
+  /* 🌐 语言切换：地球图标 + 下拉多语言菜单（深色版） */
+  .land-lang-wrap { position: relative; }
+  .land-lang-btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line2); border-radius: 10px; padding: 6px 12px; background: rgba(255, 255, 255, .05); color: var(--mist2); font-size: 13px; cursor: pointer; transition: color .16s, border-color .16s; }
+  .land-lang-btn:hover { color: var(--l-paper); border-color: var(--line-hover); }
+  .land-lang-globe { width: 18px; height: 18px; }
+  .land-lang-current { font-size: 12px; }
+  .land-lang-chevron { width: 12px; height: 12px; transition: transform .2s; }
+  .land-lang-chevron.open { transform: rotate(180deg); }
+  .land-lang-menu { position: absolute; right: 0; top: calc(100% + 6px); width: 208px; max-height: 320px; overflow-y: auto; border-radius: 12px; border: 1px solid var(--line2); background: var(--ink2, #1e2126); box-shadow: 0 12px 40px -8px rgba(0, 0, 0, .6); padding: 6px 0; z-index: 50; }
+  .land-lang-item { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px 16px; border: 0; background: transparent; color: var(--mist2); font-size: 14px; cursor: pointer; transition: color .14s, background .14s; text-align: left; }
+  .land-lang-item:hover { color: var(--l-paper); background: rgba(255, 255, 255, .06); }
+  .land-lang-item.on { color: var(--cinnabar); font-weight: 500; }
+  .land-lang-item.dim { opacity: .5; }
+  .land-lang-check { width: 16px; height: 16px; color: var(--cinnabar); flex-shrink: 0; }
 
   /* hero */
   .hero { text-align: center; padding-top: clamp(48px, 8vw, 86px); padding-bottom: clamp(40px, 6vw, 60px);

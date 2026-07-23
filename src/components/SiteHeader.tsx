@@ -1,11 +1,11 @@
 // 站点顶部导航（服务端渲染）。中英各一套文案；产品下拉用简单横排链接。
 import Link from "next/link";
-import { PRODUCTS, UI_TEXT, type Locale } from "@/lib/site";
+import { PRODUCTS, uiText, type Locale } from "@/lib/site";
 import { CircleMark } from "./ui";
 import { LanguageSwitch } from "./LanguageSwitch";
 
 export function SiteHeader({ locale }: { locale: Locale }) {
-  const t = UI_TEXT[locale];
+  const t = uiText(locale);
   const homeHref = locale === "en" ? "/en" : "/";
   // 英文站产品页路由映射
   const productHref = (key: string) => {
@@ -28,7 +28,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
           <div className="hidden sm:flex items-center gap-4 text-inkmute">
             {PRODUCTS.map((p) => (
               <Link key={p.key} href={productHref(p.key)} className="hover:text-water transition">
-                {p.name[locale]}
+                {p.name[locale as "zh" | "en"] ?? p.name.en}
               </Link>
             ))}
             <Link href={`${homeHref}#pricing`} className="hover:text-water transition">

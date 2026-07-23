@@ -12,10 +12,10 @@ export type ProductContent = {
   closing: string;
 };
 
-// key → locale → content
+// key → locale → content（目前只有 zh/en 内容，用 Partial 兼容扩展 Locale）
 export const PRODUCT_CONTENT: Record<
   "wuwei" | "nian" | "shot",
-  Record<Locale, ProductContent>
+  Partial<Record<Locale, ProductContent>> & { zh: ProductContent; en: ProductContent }
 > = {
   wuwei: {
     zh: {
