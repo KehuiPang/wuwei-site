@@ -3,8 +3,8 @@
 @import "./brand-tokens.css";
 
 :root {
-  --background: var(--color-paper);   /* 月白 */
-  --foreground: var(--color-ink);     /* 玄墨黑 */
+  --background: var(--color-ink);     /* 玄墨黑 — 深色铁律 */
+  --foreground: var(--color-paper);   /* 月白 */
 }
 
 html { scroll-behavior: smooth; }
