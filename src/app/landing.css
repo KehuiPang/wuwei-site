@@ -114,6 +114,53 @@
   .claim::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--cinnabar); box-shadow: 0 0 8px 1px rgba(192, 95, 60, .65); }
   .hero .btns { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: clamp(28px, 4vw, 38px); }
   .hero .plat { margin-top: 16px; color: var(--mute); font-size: 13px; letter-spacing: 1px; }
+
+  /* —— hero 对话输入框（视觉+交互 demo，不连后端）—— */
+  .hero-chat { max-width: 680px; margin: clamp(26px, 4vw, 36px) auto 0; }
+  .hc-box { display: flex; align-items: flex-end; gap: 10px; background: rgba(22, 26, 32, .72);
+    border: 1px solid var(--indigo); border-radius: 18px; padding: 14px 14px 14px 20px;
+    transition: border-color .2s, box-shadow .2s; }
+  .hero-chat.focus .hc-box { border-color: var(--steel);
+    box-shadow: 0 0 0 3px rgba(39, 74, 99, .35), 0 0 34px rgba(111, 159, 173, .18); }
+  .hc-input { flex: 1; background: transparent; border: 0; outline: 0; resize: none;
+    color: var(--l-paper); font-family: inherit; font-size: clamp(15px, 2.2vw, 16.5px); line-height: 1.7;
+    min-height: 56px; max-height: 140px; padding: 6px 0; }
+  .hc-input::placeholder { color: var(--mute); }
+  .hc-send { display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0;
+    background: var(--cinnabar); color: #fff; border: 0; border-radius: 13px; cursor: pointer;
+    padding: 11px 18px; font-size: 15px; font-weight: 600; letter-spacing: 1px; font-family: inherit;
+    box-shadow: 0 8px 22px -8px rgba(192, 95, 60, .55);
+    transition: transform .16s, background .16s, box-shadow .16s; }
+  .hc-send:hover { background: var(--cinnabar2); transform: translateY(-2px);
+    box-shadow: 0 14px 30px -10px rgba(192, 95, 60, .7); }
+  .hc-send:active { transform: translateY(0); }
+  .hc-hint { display: block; margin: 12px auto 0; background: none; border: 0; cursor: pointer;
+    color: var(--mute); font-size: 13px; letter-spacing: 1px; font-family: inherit;
+    transition: color .16s; }
+  .hc-hint:hover { color: var(--steel); }
+  .hc-hint-arrow { display: inline-block; animation: hc-bob 1.8s ease-in-out infinite; }
+  @keyframes hc-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+  /* 引导下载 modal */
+  .hc-mask { position: fixed; inset: 0; z-index: 90; background: rgba(10, 12, 15, .66);
+    backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 24px;
+    animation: hc-fade .18s ease-out; }
+  @keyframes hc-fade { from { opacity: 0; } to { opacity: 1; } }
+  .hc-modal { max-width: 460px; width: 100%; text-align: center;
+    background: #1A1F26; border: 1px solid var(--line2); border-radius: 20px;
+    padding: clamp(28px, 5vw, 40px); box-shadow: 0 40px 90px -30px rgba(0, 0, 0, .85);
+    animation: hc-pop .22s cubic-bezier(.2, .9, .3, 1.2); }
+  @keyframes hc-pop { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: none; } }
+  .hc-modal-title { font-size: 21px; font-weight: 600; letter-spacing: 2px; }
+  .hc-modal-echo { margin: 14px auto 0; max-width: 340px; color: var(--steel); font-size: 14px; line-height: 1.7;
+    border: 1px solid var(--line2); border-radius: 12px; padding: 10px 14px; background: rgba(39, 74, 99, .12);
+    overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .hc-modal-body { color: var(--mist2); font-size: 15px; line-height: 1.85; margin-top: 16px; }
+  .hc-modal-btns { display: flex; flex-direction: column; gap: 12px; margin-top: 26px; align-items: center; }
+  .hc-modal-cta { width: 100%; justify-content: center; text-align: center; }
+  @media (max-width: 640px) {
+    .hc-box { flex-direction: column; align-items: stretch; padding: 14px; }
+    .hc-send { justify-content: center; }
+  }
   .trust { margin-top: clamp(30px, 4vw, 44px); }
   .trust .tt { color: var(--mute2); font-size: 12px; letter-spacing: 3px; margin-bottom: 14px; }
   .trust .logos { display: flex; flex-wrap: wrap; gap: 10px 12px; justify-content: center; max-width: 760px; margin: 0 auto; }

@@ -5,6 +5,7 @@ import { FALLBACK_PLANS_CN } from "@/lib/fallback-pricing";
 import { Track } from "@/components/Track";
 import { Reveal } from "@/components/Reveal";
 import { HeroDemo } from "@/components/HeroDemo";
+import { HeroChatBox } from "@/components/HeroChatBox";
 import { LandLangSwitch } from "@/components/LandLangSwitch";
 
 export const revalidate = 60;
@@ -116,6 +117,7 @@ export default async function Home() {
         <h1>一念既出，<span className="spark">万事自成</span>。</h1>
         <div className="en">ONE INTENTION. EVERYTHING DONE.</div>
         <p className="vp"><b>极致简单 · 无门槛 · 免费。</b><br/><span className="dim">下载打开，说句人话——用着用着，活就悄悄干完了，而且干得漂亮。</span></p>
+        <HeroChatBox lang="zh" />
         <div className="claims">
           <span className="claim">极致简单</span>
           <span className="claim">零门槛</span>
@@ -123,11 +125,7 @@ export default async function Home() {
           <span className="claim">用着丝滑</span>
           <span className="claim">干得漂亮</span>
         </div>
-        <div className="btns" id="download">
-          <a className="btn btn-p" href="#price">▼ 免费下载 · 30 秒上手</a>
-          <a className="btn btn-g" href="#how">看它如何工作</a>
-        </div>
-        <div className="plat">免费开始 · 国内直连　|　macOS · Windows · Linux</div>
+        <div className="plat" id="download">免费开始 · 国内直连　|　macOS · Windows · Linux</div>
         <HeroDemo title="无为 · 一句话，活自己干完" lines={[
           {role:"you", text:"你 ▸ 把这份 sales.xlsx 清洗好，导出 CSV 再画张趋势图"},
           {role:"wu", text:"无为 ▸ 读取 sales.xlsx · 2,317 行"},

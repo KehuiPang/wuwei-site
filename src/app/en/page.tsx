@@ -4,6 +4,7 @@ import { getPricing, getLatestReleases, type Plan } from "@/lib/data";
 import { Track } from "@/components/Track";
 import { Reveal } from "@/components/Reveal";
 import { HeroDemo } from "@/components/HeroDemo";
+import { HeroChatBox } from "@/components/HeroChatBox";
 import { LandLangSwitch } from "@/components/LandLangSwitch";
 
 export const revalidate = 60; // ISR：改价/发版后 60s 内自动生效
@@ -133,6 +134,7 @@ export default async function EnHome() {
         <h1>One intention. <span className="spark">Everything done.</span></h1>
         <div className="en">无为 · WUWEI</div>
         <p className="vp"><b>Effortless · Zero setup · Free.</b><br /><span className="dim">Download, open, say it in plain words — and the work quietly gets done, beautifully.</span></p>
+        <HeroChatBox lang="en" />
         <div className="claims">
           <span className="claim">Effortless</span>
           <span className="claim">Zero setup</span>
@@ -140,11 +142,7 @@ export default async function EnHome() {
           <span className="claim">Silky to use</span>
           <span className="claim">Done well</span>
         </div>
-        <div className="btns" id="download">
-          <a className="btn btn-p" href="#price">▼ Download Free · 30-sec start</a>
-          <a className="btn btn-g" href="#how">See how it works</a>
-        </div>
-        <div className="plat">{hasRelease ? "Free to start" : "Free to start · installers coming soon"} &nbsp;|&nbsp; macOS · Windows · Linux</div>
+        <div className="plat" id="download">{hasRelease ? "Free to start" : "Free to start · installers coming soon"} &nbsp;|&nbsp; macOS · Windows · Linux</div>
         <HeroDemo
           title="Wuwei · one sentence, work done"
           lines={[
