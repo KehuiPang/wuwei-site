@@ -206,9 +206,9 @@ export default async function AnalyticsPage() {
           </div>
         )}
 
-        {/* —— 每日明细表（可折叠） —— */}
+        {/* —— 每日明细表（可折叠，数字可点击下钻） —— */}
         <details style={s.panel}>
-          <summary style={s.detailsSummary}>📋 每日明细数据</summary>
+          <summary style={s.detailsSummary}>📋 每日明细数据（点击数字查看当日明细）</summary>
           <div style={{ overflowX: "auto", marginTop: 12 }}>
             <table style={s.table}>
               <thead>
@@ -224,18 +224,19 @@ export default async function AnalyticsPage() {
                   <tr key={d.day}>
                     <td style={s.td}>{d.day}</td>
                     <td style={{ ...s.td, textAlign: "right", fontWeight: 600 }}>
-                      {d.pv.toLocaleString()}
+                      <Link href={`/admin/analytics/detail/pv/${d.day}`} style={s.cellLink}>
+                        {d.pv.toLocaleString()}
+                      </Link>
                     </td>
-                    <td style={{ ...s.td, textAlign: "right" }}>{d.uv.toLocaleString()}</td>
-                    <td
-                      style={{
-                        ...s.td,
-                        textAlign: "right",
-                        color: "var(--adm-spark)",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {d.downloads.toLocaleString()}
+                    <td style={{ ...s.td, textAlign: "right" }}>
+                      <Link href={`/admin/analytics/detail/pv/${d.day}`} style={s.cellLink}>
+                        {d.uv.toLocaleString()}
+                      </Link>
+                    </td>
+                    <td style={{ ...s.td, textAlign: "right" }}>
+                      <Link href={`/admin/analytics/detail/downloads/${d.day}`} style={{ ...s.cellLink, color: "var(--adm-spark)" }}>
+                        {d.downloads.toLocaleString()}
+                      </Link>
                     </td>
                   </tr>
                 ))}
@@ -593,5 +594,13 @@ const s: Record<string, React.CSSProperties> = {
     padding: "8px 12px",
     borderBottom: "1px solid var(--adm-border)",
     verticalAlign: "top" as const,
+  },
+  cellLink: {
+    color: "var(--adm-indigo)",
+    textDecoration: "none",
+    fontWeight: 600,
+    cursor: "pointer",
+    borderBottom: "1px dashed transparent",
+    transition: "border-color 0.15s",
   },
 };

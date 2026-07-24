@@ -83,13 +83,16 @@ export function Empty({ hint }: { hint?: string }) {
   );
 }
 
-// 数据表
+// 数据表（支持可点击单元格）
 export function DataTable({
   headers,
   rows,
+  links,
 }: {
   headers: string[];
   rows: string[][];
+  /** 可选：每行每列的链接。links[i][j] = href，有值则该单元格渲染为 Link */
+  links?: (string | null)[][];
 }) {
   return (
     <div style={{ overflowX: "auto" }}>
@@ -106,18 +109,28 @@ export function DataTable({
         <tbody>
           {rows.map((row, i) => (
             <tr key={i}>
-              {row.map((cell, j) => (
-                <td
-                  key={j}
-                  style={{
-                    ...s.td,
-                    textAlign: j > 0 ? ("right" as const) : ("left" as const),
-                    fontWeight: j > 0 ? 600 : 400,
-                  }}
-                >
-                  {cell}
-                </td>
-              ))}
+              {row.map((cell, j) => {
+                const href = links?.[i]?.[j];
+                const cellStyle = {
+                  ...s.td,
+                  textAlign: j > 0 ? ("right" as const) : ("left" as const),
+                  fontWeight: j > 0 ? 600 : 400,
+                };
+                if (href) {
+                  return (
+                    <td key={j} style={cellStyle}>
+                      <Link href={href} style={s.cellLink}>
+                        {cell}
+                      </Link>
+                    </td>
+                  );
+                }
+                return (
+                  <td key={j} style={cellStyle}>
+                    {cell}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>
@@ -230,5 +243,13 @@ const s: Record<string, React.CSSProperties> = {
     borderBottom: "1px solid var(--adm-border)",
     verticalAlign: "top" as const,
     fontVariantNumeric: "tabular-nums",
+  },
+  cellLink: {
+    color: "var(--adm-indigo)",
+    textDecoration: "none",
+    fontWeight: 600,
+    cursor: "pointer",
+    borderBottom: "1px dashed transparent",
+    transition: "border-color 0.15s",
   },
 };

@@ -64,14 +64,18 @@ export default async function UvDetailPage() {
           )}
         </div>
 
-        {/* 每日明细表 */}
-        <Panel title="📋 每日 UV 明细">
+        {/* 每日明细表（UV 数字可点击下钻） */}
+        <Panel title="📋 每日 UV 明细（点击数字查看当日明细）">
           {data.daily.length === 0 ? (
             <Empty />
           ) : (
             <DataTable
               headers={["日期", "UV"]}
               rows={data.daily.map((d) => [d.day, String(d.uv)])}
+              links={data.daily.map((d) => [
+                null,
+                `/admin/analytics/detail/pv/${d.day}`,
+              ])}
             />
           )}
         </Panel>

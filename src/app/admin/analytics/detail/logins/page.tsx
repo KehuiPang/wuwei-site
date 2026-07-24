@@ -41,6 +41,22 @@ export default async function LoginsDetailPage() {
           )}
         </Panel>
 
+        {/* 每日登录明细表（可点击下钻） */}
+        <Panel title="📋 每日登录明细（点击数字查看当日明细）">
+          {data.daily.length === 0 ? (
+            <Empty hint="客户端登录上报接入后自动显示" />
+          ) : (
+            <DataTable
+              headers={["日期", "登录次数"]}
+              rows={data.daily.map((d) => [d.key, String(d.count)])}
+              links={data.daily.map((d) => [
+                null,
+                `/admin/analytics/detail/logins/${d.key}`,
+              ])}
+            />
+          )}
+        </Panel>
+
         {/* 分布区 */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 16, marginBottom: 24 }}>
           {data.byVersion.length > 0 && (

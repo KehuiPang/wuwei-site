@@ -369,3 +369,141 @@ export async function getLoginDetail(windowDays = 30): Promise<LoginDetail> {
     })),
   };
 }
+
+// ============================================================
+// 单日明细下钻查询
+// ============================================================
+
+export type DayPvDetail = {
+  day: string;
+  pv: number;
+  uv: number;
+  topReferers: Bar[];
+  topLanding: Bar[];
+  topCountries: Bar[];
+};
+
+export type DayDownloadDetail = {
+  day: string;
+  total: number;
+  byProduct: Bar[];
+  byPlatform: Bar[];
+};
+
+export type DayLoginDetail = {
+  day: string;
+  total: number;
+  byVersion: Bar[];
+  byPlatform: Bar[];
+  records: { anon_id: string; version: string; platform: string; created_at: string }[];
+};
+
+/** 单日 PV 明细 */
+export async function getDayPvDetail(day: string): Promise<DayPvDetail> {
+  const sb = supabaseAdmin();
+  const dayStart = `${day}T00:00:00Z`;
+  const dayEnd = `${day}T23:59:59Z`;
+
+  const { data } = await sb
+    .from("analytics_events")
+    .select("anon_id,country,referer,path,ua")
+    .eq("event_type", "pageview")
+    .gte("created_at", dayStart)
+    .lte("created_at", dayEnd)
+    .limit(5000);
+
+  const ev = (data ?? []).filter((e) => !BOT_UA.test(e.ua || ""));
+  const uvs = new Set<string>();
+  const refs = new Map<string, number>();
+  const landing = new Map<string, number>();
+  const countries = new Map<string, number>();
+
+  for (const e of ev) {
+    if (e.anon_id) uvs.add(e.anon_id);
+    refs.set(refererHost(e.referer), (refs.get(refererHost(e.referer)) || 0) + 1);
+    const p = e.path || "/";
+    landing.set(p, (landing.get(p) || 0) + 1);
+    const c = e.country || "(未知)";
+    countries.set(c, (countries.get(c) || 0) + 1);
+  }
+
+  return {
+    day,
+    pv: ev.length,
+    uv: uvs.size,
+    topReferers: topN(refs, 10),
+    topLanding: topN(landing, 10),
+    topCountries: topN(countries, 10),
+  };
+}
+
+/** 单日下载明细 */
+export async function getDayDownloadDetail(day: string): Promise<DayDownloadDetail> {
+  const sb = supabaseAdmin();
+  const dayStart = `${day}T00:00:00Z`;
+  const dayEnd = `${day}T23:59:59Z`;
+
+  const { data } = await sb
+    .from("analytics_events")
+    .select("platform,meta")
+    .eq("event_type", "download")
+    .gte("created_at", dayStart)
+    .lte("created_at", dayEnd)
+    .limit(5000);
+
+  const products = new Map<string, number>();
+  const platforms = new Map<string, number>();
+
+  for (const e of data ?? []) {
+    const product = ((e.meta as Record<string, unknown>)?.product as string) || "(未知)";
+    products.set(product, (products.get(product) || 0) + 1);
+    const p = e.platform || "(未知)";
+    platforms.set(p, (platforms.get(p) || 0) + 1);
+  }
+
+  return {
+    day,
+    total: (data ?? []).length,
+    byProduct: topN(products, 10),
+    byPlatform: topN(platforms, 10),
+  };
+}
+
+/** 单日登录明细 */
+export async function getDayLoginDetail(day: string): Promise<DayLoginDetail> {
+  const sb = supabaseAdmin();
+  const dayStart = `${day}T00:00:00Z`;
+  const dayEnd = `${day}T23:59:59Z`;
+
+  const { data } = await sb
+    .from("client_events")
+    .select("anon_id,version,platform,created_at")
+    .eq("event", "login")
+    .gte("created_at", dayStart)
+    .lte("created_at", dayEnd)
+    .order("created_at", { ascending: false })
+    .limit(500);
+
+  const versions = new Map<string, number>();
+  const platforms = new Map<string, number>();
+
+  for (const e of data ?? []) {
+    const v = e.version || "(未知)";
+    versions.set(v, (versions.get(v) || 0) + 1);
+    const p = e.platform || "(未知)";
+    platforms.set(p, (platforms.get(p) || 0) + 1);
+  }
+
+  return {
+    day,
+    total: (data ?? []).length,
+    byVersion: topN(versions, 10),
+    byPlatform: topN(platforms, 10),
+    records: (data ?? []).map((e) => ({
+      anon_id: e.anon_id || "(匿名)",
+      version: e.version || "?",
+      platform: e.platform || "?",
+      created_at: String(e.created_at),
+    })),
+  };
+}
