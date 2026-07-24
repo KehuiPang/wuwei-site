@@ -44,19 +44,31 @@ function dayKey(iso: string): string {
   return iso.slice(0, 10); // YYYY-MM-DD
 }
 
-export async function getDashboard(windowDays = 30): Promise<Dashboard> {
+export async function getDashboard(windowDays = 30, excludeTags: string[] = ["self", "bot"]): Promise<Dashboard> {
   const sb = supabaseAdmin();
   const since = new Date(Date.now() - windowDays * 86400_000).toISOString();
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
   const todayISO = todayStart.toISOString();
 
+  // 统计口径排除：按 ip_tags 标签拿要排除的 IP 列表（self/bot 等）
+  let excludeIps: string[] = [];
+  if (excludeTags.length > 0) {
+    const { data: tagRows } = await sb.from("ip_tags").select("ip_address").in("tag", excludeTags);
+    excludeIps = (tagRows ?? []).map((r) => r.ip_address).filter(Boolean) as string[];
+  }
+  // 条件性排除过滤：excludeIps 非空时给 analytics_events 查询加 .not("ip_address","in",...)
+  const applyExclude = <T extends { not: (col: string, op: string, val: string) => T }>(q: T): T =>
+    excludeIps.length > 0 ? q.not("ip_address", "in", `(${excludeIps.map((ip) => `"${ip}"`).join(",")})`) : q;
+
   const [dailyRes, evRes, loginRes, activateRes, usageRes, dauRes] = await Promise.all([
     sb.from("v_daily_stats").select("day,pv,uv,downloads").limit(windowDays),
-    sb
-      .from("analytics_events")
-      .select("event_type,anon_id,country,referer,path,ua,created_at")
-      .gte("created_at", since)
+    applyExclude(
+      sb
+        .from("analytics_events")
+        .select("event_type,anon_id,country,referer,path,ua,created_at")
+        .gte("created_at", since)
+    )
       .order("created_at", { ascending: false })
       .limit(10000),
     sb
@@ -67,19 +79,23 @@ export async function getDashboard(windowDays = 30): Promise<Dashboard> {
       .order("created_at", { ascending: false })
       .limit(10000),
     // 客户端激活事件（analytics_events 表）
-    sb
-      .from("analytics_events")
-      .select("anon_id,created_at")
-      .eq("event_type", "client_activate")
-      .gte("created_at", since)
+    applyExclude(
+      sb
+        .from("analytics_events")
+        .select("anon_id,created_at")
+        .eq("event_type", "client_activate")
+        .gte("created_at", since)
+    )
       .order("created_at", { ascending: false })
       .limit(10000),
     // 客户端使用事件（analytics_events 表）
-    sb
-      .from("analytics_events")
-      .select("anon_id,created_at")
-      .eq("event_type", "client_usage")
-      .gte("created_at", since)
+    applyExclude(
+      sb
+        .from("analytics_events")
+        .select("anon_id,created_at")
+        .eq("event_type", "client_usage")
+        .gte("created_at", since)
+    )
       .order("created_at", { ascending: false })
       .limit(10000),
     // 今日 DAU：client_events 表今日有任意事件的匿名 ID 去重
