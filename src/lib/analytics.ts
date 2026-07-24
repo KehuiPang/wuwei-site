@@ -178,3 +178,194 @@ export async function getDashboard(windowDays = 30): Promise<Dashboard> {
     windowDays,
   };
 }
+
+// ============================================================
+// 详情页数据查询
+// ============================================================
+
+export type PvDetail = {
+  daily: DailyStat[];
+  topReferers: Bar[];
+  topLanding: Bar[];
+  topCountries: Bar[];
+};
+
+export type UvDetail = {
+  daily: { day: string; uv: number }[];
+  topReferers: Bar[];
+  topCountries: Bar[];
+  topLanding: Bar[];
+};
+
+export type DownloadDetail = {
+  byProduct: Bar[];
+  byPlatform: Bar[];
+  daily: Bar[];
+};
+
+export type LoginDetail = {
+  daily: Bar[];
+  byVersion: Bar[];
+  byPlatform: Bar[];
+  recentLogins: { anon_id: string; version: string; platform: string; created_at: string }[];
+};
+
+/** PV 详情：每日 PV + 来源/落地页/国家分布 */
+export async function getPvDetail(windowDays = 30): Promise<PvDetail> {
+  const sb = supabaseAdmin();
+  const since = new Date(Date.now() - windowDays * 86400_000).toISOString();
+
+  const { data } = await sb
+    .from("analytics_events")
+    .select("event_type,anon_id,country,referer,path,ua,created_at")
+    .eq("event_type", "pageview")
+    .gte("created_at", since)
+    .order("created_at", { ascending: false })
+    .limit(10000);
+
+  const ev = (data ?? []).filter((e) => !BOT_UA.test(e.ua || ""));
+  const dayMap = new Map<string, { pv: number; uvs: Set<string> }>();
+  const refs = new Map<string, number>();
+  const landing = new Map<string, number>();
+  const countries = new Map<string, number>();
+
+  for (const e of ev) {
+    const d = dayKey(String(e.created_at));
+    if (!dayMap.has(d)) dayMap.set(d, { pv: 0, uvs: new Set() });
+    const entry = dayMap.get(d)!;
+    entry.pv++;
+    if (e.anon_id) entry.uvs.add(e.anon_id);
+
+    refs.set(refererHost(e.referer), (refs.get(refererHost(e.referer)) || 0) + 1);
+    const p = e.path || "/";
+    landing.set(p, (landing.get(p) || 0) + 1);
+    const c = e.country || "(未知)";
+    countries.set(c, (countries.get(c) || 0) + 1);
+  }
+
+  const daily: DailyStat[] = [...dayMap.entries()]
+    .map(([day, v]) => ({ day, pv: v.pv, uv: v.uvs.size, downloads: 0 }))
+    .sort((a, b) => (a.day < b.day ? 1 : -1));
+
+  return { daily, topReferers: topN(refs, 10), topLanding: topN(landing, 10), topCountries: topN(countries, 10) };
+}
+
+/** UV 详情：每日 UV + 分维度 */
+export async function getUvDetail(windowDays = 30): Promise<UvDetail> {
+  const sb = supabaseAdmin();
+  const since = new Date(Date.now() - windowDays * 86400_000).toISOString();
+
+  const { data } = await sb
+    .from("analytics_events")
+    .select("event_type,anon_id,country,referer,path,ua,created_at")
+    .eq("event_type", "pageview")
+    .gte("created_at", since)
+    .order("created_at", { ascending: false })
+    .limit(10000);
+
+  const ev = (data ?? []).filter((e) => !BOT_UA.test(e.ua || ""));
+  const dayMap = new Map<string, Set<string>>();
+  const refs = new Map<string, Set<string>>();
+  const countries = new Map<string, Set<string>>();
+  const landing = new Map<string, Set<string>>();
+
+  for (const e of ev) {
+    if (!e.anon_id) continue;
+    const d = dayKey(String(e.created_at));
+    if (!dayMap.has(d)) dayMap.set(d, new Set());
+    dayMap.get(d)!.add(e.anon_id);
+
+    const rh = refererHost(e.referer);
+    if (!refs.has(rh)) refs.set(rh, new Set());
+    refs.get(rh)!.add(e.anon_id);
+
+    const c = e.country || "(未知)";
+    if (!countries.has(c)) countries.set(c, new Set());
+    countries.get(c)!.add(e.anon_id);
+
+    const p = e.path || "/";
+    if (!landing.has(p)) landing.set(p, new Set());
+    landing.get(p)!.add(e.anon_id);
+  }
+
+  const daily = [...dayMap.entries()]
+    .map(([day, uvs]) => ({ day, uv: uvs.size }))
+    .sort((a, b) => (a.day < b.day ? 1 : -1));
+
+  const toCount = (m: Map<string, Set<string>>) =>
+    [...m.entries()].map(([key, s]) => ({ key, count: s.size })).sort((a, b) => b.count - a.count).slice(0, 10);
+
+  return { daily, topReferers: toCount(refs), topCountries: toCount(countries), topLanding: toCount(landing) };
+}
+
+/** 下载详情：按产品/平台/每日 */
+export async function getDownloadDetail(windowDays = 30): Promise<DownloadDetail> {
+  const sb = supabaseAdmin();
+  const since = new Date(Date.now() - windowDays * 86400_000).toISOString();
+
+  const { data } = await sb
+    .from("analytics_events")
+    .select("path,platform,meta,created_at")
+    .eq("event_type", "download")
+    .gte("created_at", since)
+    .order("created_at", { ascending: false })
+    .limit(10000);
+
+  const products = new Map<string, number>();
+  const platforms = new Map<string, number>();
+  const days = new Map<string, number>();
+
+  for (const e of data ?? []) {
+    const product = ((e.meta as Record<string, unknown>)?.product as string) || "(未知)";
+    products.set(product, (products.get(product) || 0) + 1);
+    const p = e.platform || "(未知)";
+    platforms.set(p, (platforms.get(p) || 0) + 1);
+    const d = dayKey(String(e.created_at));
+    days.set(d, (days.get(d) || 0) + 1);
+  }
+
+  return {
+    byProduct: topN(products, 10),
+    byPlatform: topN(platforms, 10),
+    daily: [...days.entries()].map(([key, count]) => ({ key, count })).sort((a, b) => (a.key < b.key ? 1 : -1)),
+  };
+}
+
+/** 客户端登录详情 */
+export async function getLoginDetail(windowDays = 30): Promise<LoginDetail> {
+  const sb = supabaseAdmin();
+  const since = new Date(Date.now() - windowDays * 86400_000).toISOString();
+
+  const { data } = await sb
+    .from("client_events")
+    .select("anon_id,event,version,platform,created_at")
+    .eq("event", "login")
+    .gte("created_at", since)
+    .order("created_at", { ascending: false })
+    .limit(10000);
+
+  const days = new Map<string, number>();
+  const versions = new Map<string, number>();
+  const platforms = new Map<string, number>();
+
+  for (const e of data ?? []) {
+    const d = dayKey(String(e.created_at));
+    days.set(d, (days.get(d) || 0) + 1);
+    const v = e.version || "(未知)";
+    versions.set(v, (versions.get(v) || 0) + 1);
+    const p = e.platform || "(未知)";
+    platforms.set(p, (platforms.get(p) || 0) + 1);
+  }
+
+  return {
+    daily: [...days.entries()].map(([key, count]) => ({ key, count })).sort((a, b) => (a.key < b.key ? 1 : -1)),
+    byVersion: topN(versions, 10),
+    byPlatform: topN(platforms, 10),
+    recentLogins: (data ?? []).slice(0, 50).map((e) => ({
+      anon_id: e.anon_id || "(匿名)",
+      version: e.version || "?",
+      platform: e.platform || "?",
+      created_at: String(e.created_at),
+    })),
+  };
+}

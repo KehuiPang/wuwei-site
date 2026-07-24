@@ -1,4 +1,5 @@
 import { notFound, redirect } from "next/navigation";
+import Link from "next/link";
 import { getDashboard } from "@/lib/analytics";
 import { getAdmin } from "@/lib/supabase-server";
 import { AdminTopBar } from "./components/AdminTopBar";
@@ -68,14 +69,22 @@ export default async function AnalyticsPage() {
       <AdminTopBar title="无为 · 数据后台" subtitle={`近 ${dashboard.windowDays} 天数据`} />
 
       <div style={s.container}>
-        {/* —— 6 列核心指标卡 —— */}
+        {/* —— 6 列核心指标卡（4 张可点击查看详情） —— */}
         <div style={s.statsGrid}>
-          <StatCard label="页面访问 PV" value={totals.pv} icon="👁" accent="var(--adm-indigo)" />
-          <StatCard label="独立访客 UV" value={totals.uv} icon="👤" accent="var(--adm-bamboo)" />
-          <StatCard label="下载次数" value={totals.downloads} icon="⬇" accent="var(--adm-spark)" />
+          <Link href="/admin/analytics/detail/pv" style={s.statLink}>
+            <StatCard label="页面访问 PV" value={totals.pv} icon="👁" accent="var(--adm-indigo)" clickable />
+          </Link>
+          <Link href="/admin/analytics/detail/uv" style={s.statLink}>
+            <StatCard label="独立访客 UV" value={totals.uv} icon="👤" accent="var(--adm-bamboo)" clickable />
+          </Link>
+          <Link href="/admin/analytics/detail/downloads" style={s.statLink}>
+            <StatCard label="下载次数" value={totals.downloads} icon="⬇" accent="var(--adm-spark)" clickable />
+          </Link>
           <StatCard label="客户端激活" value={totals.activations} icon="⚡" accent="var(--adm-gold)" />
           <StatCard label="今日活跃客户端" value={dau} icon="📱" accent="var(--adm-cyan)" />
-          <StatCard label="客户端登录" value={totals.logins} icon="🔑" accent="var(--adm-purple)" />
+          <Link href="/admin/analytics/detail/logins" style={s.statLink}>
+            <StatCard label="客户端登录" value={totals.logins} icon="🔑" accent="var(--adm-purple)" clickable />
+          </Link>
         </div>
 
         {/* —— 下载→激活转化率 —— */}
@@ -248,17 +257,29 @@ function StatCard({
   value,
   icon,
   accent,
+  clickable,
 }: {
   label: string;
   value: number;
   icon: string;
   accent: string;
+  clickable?: boolean;
 }) {
   return (
-    <div style={s.statCard}>
+    <div
+      style={{
+        ...s.statCard,
+        ...(clickable ? s.statCardClickable : {}),
+      }}
+    >
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span style={{ fontSize: 20 }}>{icon}</span>
-        <span style={{ width: 8, height: 8, borderRadius: "50%", background: accent, opacity: 0.7 }} />
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          {clickable && (
+            <span style={{ fontSize: 11, color: "var(--adm-dim)", opacity: 0.6 }}>详情 →</span>
+          )}
+          <span style={{ width: 8, height: 8, borderRadius: "50%", background: accent, opacity: 0.7 }} />
+        </div>
       </div>
       <div
         style={{
@@ -354,6 +375,11 @@ const ADMIN_CSS_VARS = `
   @media (max-width: 768px) {
     .adm-charts-row { flex-direction: column !important; }
   }
+  /* 可点击指标卡 hover 效果 */
+  a[style] > div[style]:hover {
+    border-color: var(--adm-dim) !important;
+    transform: translateY(-1px);
+  }
 `;
 
 // ============================================================
@@ -392,6 +418,15 @@ const s: Record<string, React.CSSProperties> = {
     border: "1px solid var(--adm-border)",
     borderRadius: 12,
     padding: "20px 20px 16px",
+    transition: "border-color 0.2s, transform 0.15s",
+  },
+  statCardClickable: {
+    cursor: "pointer",
+  },
+  statLink: {
+    textDecoration: "none",
+    color: "inherit",
+    display: "block",
   },
 
   // 转化率面板
