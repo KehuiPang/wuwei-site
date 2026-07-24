@@ -407,3 +407,189 @@ export async function getAllPricing(): Promise<Plan[]> {
   if (error) throw new Error(`读取定价失败: ${error.message}`);
   return (data as Plan[]) ?? [];
 }
+
+// ============================================================
+// 6. 设备级免费试用
+// ============================================================
+
+export interface DeviceFreeTrial {
+  device_id: string;
+  total_quota: number;
+  remaining: number;
+  created_at: string;
+  updated_at: string;
+}
+
+/** 查询设备免费试用配额 */
+export async function getDeviceTrial(deviceId: string): Promise<DeviceFreeTrial | null> {
+  const sb = supabaseAdmin();
+  const { data, error } = await sb
+    .from("device_free_trial")
+    .select("*")
+    .eq("device_id", deviceId)
+    .maybeSingle();
+
+  if (error) throw new Error(`查询设备试用失败: ${error.message}`);
+  return (data as DeviceFreeTrial) ?? null;
+}
+
+/** 创建或重置设备免费试用 */
+export async function createDeviceTrial(deviceId: string, quota?: number): Promise<DeviceFreeTrial> {
+  const sb = supabaseAdmin();
+
+  // 读默认配额
+  const { data: cfg } = await sb
+    .from("operation_config")
+    .select("value")
+    .eq("key", "free_trial.quota")
+    .maybeSingle();
+
+  const defaultQuota = quota ?? (cfg?.value as { default_quota?: number })?.default_quota ?? 10;
+
+  const { data, error } = await sb
+    .from("device_free_trial")
+    .upsert({
+      device_id: deviceId,
+      total_quota: defaultQuota,
+      remaining: defaultQuota,
+      updated_at: new Date().toISOString(),
+    }, { onConflict: "device_id" })
+    .select()
+    .single();
+
+  if (error) throw new Error(`创建设备试用失败: ${error.message}`);
+  return data as DeviceFreeTrial;
+}
+
+/** 扣减设备免费试用次数（返回扣减后剩余） */
+export async function consumeDeviceTrial(deviceId: string): Promise<{ success: boolean; remaining: number; total: number }> {
+  const sb = supabaseAdmin();
+
+  const trial = await getDeviceTrial(deviceId);
+  if (!trial) {
+    // 自动创建
+    const created = await createDeviceTrial(deviceId);
+    return { success: true, remaining: created.remaining - 1, total: created.total_quota };
+  }
+
+  if (trial.remaining <= 0) {
+    return { success: false, remaining: 0, total: trial.total_quota };
+  }
+
+  const { data: updated, error } = await sb
+    .from("device_free_trial")
+    .update({
+      remaining: trial.remaining - 1,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("device_id", deviceId)
+    .eq("remaining", trial.remaining) // 乐观锁
+    .select()
+    .single();
+
+  if (error || !updated) {
+    // 乐观锁冲突，返回最新值
+    const latest = await getDeviceTrial(deviceId);
+    return { success: false, remaining: latest?.remaining ?? 0, total: latest?.total_quota ?? trial.total_quota };
+  }
+
+  return { success: true, remaining: updated.remaining, total: updated.total_quota };
+}
+
+// ============================================================
+// 7. 按 token 扣积分
+// ============================================================
+
+export interface TokenPriceConfig {
+  name: string;
+  input_per_1k: number;
+  output_per_1k: number;
+  cost_per_msg?: number;
+}
+
+/** 读取模型 token 单价配置 */
+export async function getModelTokenPrice(modelKey: string): Promise<TokenPriceConfig | null> {
+  const sb = supabaseAdmin();
+  const { data, error } = await sb
+    .from("operation_config")
+    .select("value")
+    .eq("key", `model_token_price.${modelKey}`)
+    .maybeSingle();
+
+  if (error || !data) return null;
+  return (data.value as TokenPriceConfig) ?? null;
+}
+
+/** 计算 token 消耗积分（输入 + 输出分别计价） */
+export function calculateTokenCost(
+  price: TokenPriceConfig,
+  inputTokens: number,
+  outputTokens: number
+): number {
+  const inputCost = (inputTokens / 1000) * price.input_per_1k;
+  const outputCost = (outputTokens / 1000) * price.output_per_1k;
+  return Math.ceil(inputCost + outputCost); // 积分取整（向上）
+}
+
+/** 按 token 扣用户积分 */
+export async function spendCoinsByToken(
+  userId: string,
+  modelKey: string,
+  inputTokens: number,
+  outputTokens: number,
+  description?: string
+): Promise<{ success: boolean; cost: number; balanceAfter: number; message?: string }> {
+  const sb = supabaseAdmin();
+
+  // 1. 读模型单价
+  const price = await getModelTokenPrice(modelKey);
+  if (!price) {
+    return { success: false, cost: 0, balanceAfter: 0, message: `未知模型: ${modelKey}` };
+  }
+
+  // 2. 计算消耗
+  const cost = calculateTokenCost(price, inputTokens, outputTokens);
+
+  // 3. 查余额
+  const balance = await getUserBalance(userId);
+  const currentBalance = balance?.balance ?? 0;
+
+  if (currentBalance < cost) {
+    return { success: false, cost, balanceAfter: currentBalance, message: "积分余额不足" };
+  }
+
+  // 4. 扣积分
+  const newBalance = currentBalance - cost;
+  const { error: upsertErr } = await sb
+    .from("user_coin_balance")
+    .upsert({
+      user_id: userId,
+      balance: newBalance,
+      total_earned: balance?.total_earned ?? 0,
+      total_spent: (balance?.total_spent ?? 0) + cost,
+      updated_at: new Date().toISOString(),
+    }, { onConflict: "user_id" });
+
+  if (upsertErr) {
+    throw new Error(`扣减积分失败: ${upsertErr.message}`);
+  }
+
+  // 5. 写流水
+  const { error: txErr } = await sb.from("coin_transactions").insert({
+    user_id: userId,
+    type: "spend",
+    amount: -cost,
+    balance_after: newBalance,
+    source: "model_usage",
+    description: description || `${modelKey} ${inputTokens}/${outputTokens} tokens`,
+    meta: { model: modelKey, input_tokens: inputTokens, output_tokens: outputTokens, cost },
+    created_at: new Date().toISOString(),
+  });
+
+  if (txErr) {
+    console.error("记录流水失败:", txErr.message);
+    // 流水失败不打断，但记日志
+  }
+
+  return { success: true, cost, balanceAfter: newBalance };
+}
