@@ -24,6 +24,23 @@ export type Dashboard = {
 
 const BOT_UA = /bot|crawler|spider|slurp|bingpreview|yandex|ahrefs|semrush|lighthouse|headlesschrome/i;
 
+type AnalyticsEvent = {
+  event_type: string;
+  anon_id: string | null;
+  country: string | null;
+  referer: string | null;
+  path: string | null;
+  ua: string | null;
+  created_at: string;
+};
+
+type ClientEvent = {
+  anon_id: string | null;
+  version: string | null;
+  platform: string | null;
+  created_at: string;
+};
+
 function refererHost(r: string | null): string {
   if (!r) return "(直接访问)";
   try {
@@ -44,7 +61,8 @@ function dayKey(iso: string): string {
   return iso.slice(0, 10); // YYYY-MM-DD
 }
 
-export async function getDashboard(windowDays = 30, excludeTags: string[] = ["self", "bot"]): Promise<Dashboard> {
+// product: 按 meta->>product 过滤 analytics_events（'site'/'voice'/'shot'，空=全部）；v_daily_stats 视图无 product 维度，暂不过滤
+export async function getDashboard(windowDays = 30, excludeTags: string[] = ["self", "bot"], product?: string): Promise<Dashboard> {
   const sb = supabaseAdmin();
   const since = new Date(Date.now() - windowDays * 86400_000).toISOString();
   const todayStart = new Date();
@@ -57,13 +75,16 @@ export async function getDashboard(windowDays = 30, excludeTags: string[] = ["se
     const { data: tagRows } = await sb.from("ip_tags").select("ip_address").in("tag", excludeTags);
     excludeIps = (tagRows ?? []).map((r) => r.ip_address).filter(Boolean) as string[];
   }
-  // 条件性排除过滤：excludeIps 非空时给 analytics_events 查询加 .not("ip_address","in",...)
-  const applyExclude = <T extends { not: (col: string, op: string, val: string) => T }>(q: T): T =>
-    excludeIps.length > 0 ? q.not("ip_address", "in", `(${excludeIps.map((ip) => `"${ip}"`).join(",")})`) : q;
+  // 条件过滤：排除标签 + 产品维度。用 any 类型绕过 Postgrest 链式类型深度展开
+  const applyFilters = (q: any): any => {
+    if (excludeIps.length > 0) q = q.not("ip_address", "in", `(${excludeIps.map((ip) => `"${ip}"`).join(",")})`);
+    if (product) q = q.eq("meta->>product", product);
+    return q;
+  };
 
   const [dailyRes, evRes, loginRes, activateRes, usageRes, dauRes] = await Promise.all([
     sb.from("v_daily_stats").select("day,pv,uv,downloads").limit(windowDays),
-    applyExclude(
+    applyFilters(
       sb
         .from("analytics_events")
         .select("event_type,anon_id,country,referer,path,ua,created_at")
@@ -79,7 +100,7 @@ export async function getDashboard(windowDays = 30, excludeTags: string[] = ["se
       .order("created_at", { ascending: false })
       .limit(10000),
     // 客户端激活事件（analytics_events 表）
-    applyExclude(
+    applyFilters(
       sb
         .from("analytics_events")
         .select("anon_id,created_at")
@@ -89,7 +110,7 @@ export async function getDashboard(windowDays = 30, excludeTags: string[] = ["se
       .order("created_at", { ascending: false })
       .limit(10000),
     // 客户端使用事件（analytics_events 表）
-    applyExclude(
+    applyFilters(
       sb
         .from("analytics_events")
         .select("anon_id,created_at")
@@ -114,7 +135,7 @@ export async function getDashboard(windowDays = 30, excludeTags: string[] = ["se
   }));
 
   // —— analytics_events 有界聚合（过滤 bot 防污染）——
-  const ev = (evRes.data ?? []).filter((e) => !BOT_UA.test(e.ua || ""));
+  const ev: AnalyticsEvent[] = ((evRes.data as AnalyticsEvent[]) ?? []).filter((e) => !BOT_UA.test(e.ua || ""));
   const pvUsers = new Set<string>();
   let pv = 0,
     downloads = 0;
@@ -135,7 +156,7 @@ export async function getDashboard(windowDays = 30, excludeTags: string[] = ["se
   }
 
   // —— client_events 登录聚合 ——
-  const logins = loginRes.data ?? [];
+  const logins = (loginRes.data as ClientEvent[]) ?? [];
   const loginDay = new Map<string, number>();
   const versions = new Map<string, number>();
   for (const l of logins) {
@@ -146,7 +167,7 @@ export async function getDashboard(windowDays = 30, excludeTags: string[] = ["se
   }
 
   // —— 客户端激活聚合 ——
-  const activations = activateRes.data ?? [];
+  const activations = (activateRes.data as AnalyticsEvent[]) ?? [];
   const activationDay = new Map<string, number>();
   for (const a of activations) {
     const d = dayKey(String(a.created_at));
@@ -154,7 +175,7 @@ export async function getDashboard(windowDays = 30, excludeTags: string[] = ["se
   }
 
   // —— 客户端使用聚合 ——
-  const usageEvents = usageRes.data ?? [];
+  const usageEvents = (usageRes.data as AnalyticsEvent[]) ?? [];
   const usageDay = new Map<string, number>();
   for (const u of usageEvents) {
     const d = dayKey(String(u.created_at));

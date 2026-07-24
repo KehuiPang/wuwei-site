@@ -4,6 +4,7 @@ import { getDashboard } from "@/lib/analytics";
 import { getAdmin } from "@/lib/supabase-server";
 import { AdminTopBar } from "./components/AdminTopBar";
 import { ExcludeToggle } from "./components/ExcludeToggle";
+import { ProductSwitcher } from "./components/ProductSwitcher";
 import { PvDownloadChart, SingleTrendChart } from "./components/TrendCharts";
 
 // 后台统计看板：访问/下载/激活/使用/登录 数据汇总
@@ -17,11 +18,13 @@ export const metadata = {
 export default async function AnalyticsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ exclude?: string }>;
+  searchParams: Promise<{ exclude?: string; product?: string }>;
 }) {
-  const { exclude } = await searchParams;
+  const { exclude, product } = await searchParams;
   // 统计口径：默认排除本人+爬虫（ip_tags 的 self/bot），?exclude=0 显示全部
   const excludeTags = exclude === "0" ? [] : ["self", "bot"];
+  // 产品过滤：?product=site|voice|shot，空=全部
+  const productFilter = ["site", "voice", "shot"].includes(product ?? "") ? product : undefined;
   // 服务端鉴权（fail-closed）：未登录 → 跳登录页；登录但不在 admin_users 白名单 → 404
   const admin = await getAdmin();
   if (!admin) {
@@ -36,7 +39,7 @@ export default async function AnalyticsPage({
 
   let dashboard;
   try {
-    dashboard = await getDashboard(30, excludeTags);
+    dashboard = await getDashboard(30, excludeTags, productFilter);
   } catch {
     dashboard = null;
   }
@@ -75,6 +78,9 @@ export default async function AnalyticsPage({
     <div style={s.page}>
       <style>{ADMIN_CSS_VARS}</style>
       <AdminTopBar title="无为 · 数据后台" subtitle={`近 ${dashboard.windowDays} 天数据`} />
+      <div style={{ padding: "12px 24px 0" }}>
+        <ProductSwitcher current={productFilter ?? ""} />
+      </div>
 
       <div style={s.container}>
         <ExcludeToggle isExcluding={exclude !== "0"} />

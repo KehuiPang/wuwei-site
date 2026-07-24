@@ -48,7 +48,8 @@ export async function POST(req: NextRequest) {
       ip_address: ip,
       anon_id: b.anon_id ?? null,
       ua: req.headers.get("user-agent")?.slice(0, 400) ?? null,
-      meta: b.meta ?? {},
+      // 前端没传 product 时默认 site（本尊站点自己的 pageview/download）
+      meta: { ...(b.meta ?? {}), product: b.meta?.product ?? "site" },
     });
     return NextResponse.json({ ok: true });
   } catch {
